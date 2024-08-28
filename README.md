@@ -1,5 +1,6 @@
 # Projeto Django 
 ## Objetivo do projeto e implementar site de clinicas médicas
+## Membros do Projeto
 
 <hr>
 
