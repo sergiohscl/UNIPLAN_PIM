@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'autentication/css/autentication.css' %}" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+{% endblock 'head' %}
+
+{% block 'body' %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md d-flex justify-content-center">
+
+      <div class="cont-cadastro">
+        <br />
+        <br />
+        <section class="cont-logo">
+          <a href="{% url 'home' %}">
+            <img class="logo" src="{% static 'geral/img/logo.png' %}" />
+          </a>
+          <label class="text-logo">HEALING</label>
+        </section>
+        <hr />
+        <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+          <h2 class="fonte-destaque1">Logar</h2>
+          {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+          {% endif %}
+          <br />
+          <label for="idEmailLogin">Usuário</label>
+          <input
+            type="text"
+            name="username"
+            id="idEmailLogin"
+            value="{{username}}"
+            class="form-control"
+            placeholder="Digite aqui seu nome..."
+          />
+          <br />                    
+          <div class="input-group">
+            <input
+              type="password"
+              name="password"
+              id="idSenhaLogin"
+              value="{{password}}"
+              class="form-control"
+              placeholder="Digite aqui sua senha ..."
+            />
+            <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+              <i class="fa fa-eye"></i>
+              {% comment %} <i class="bi bi-eye-slash"></i> {% endcomment %}
+            </span>
+            
+          </div>
+
+          <div class="my-3 text-end">
+            <a class="btn btn-none-border " href="{% url "password_reset" %}">
+                    <span class="fonte-destaque1 fw-bold">
+                        Esqueceu sua senha?
+                    </span>
+            </a>
+          </div>         
+          <div class="d-grid mt-2">            
+            <button class="btn btn-success btn-dark-color" type="submit">
+                Logar
+            </button>
+          </div>          
+          <br/>
+          <div class="d-grid mt-2">
+            <a href="{% provider_login_url 'google' %}" class="btn btn-success btn-dark-color" type="button">                
+              <img style="width: 25px" class="logo" src="{% static 'geral/img/google.png' %}" />
+            </a>
+          </div>
+          <br/>
+          <div class="my-3 text-center">
+            <a class="btn btn-none-border text-secondary" href="{% url "create_account" %}">
+                    <span class="fonte-destaque2 fw-bold">
+                        Criar conta
+                    </span>
+            </a>
+          </div>          
+        </form>
+      </div>
+    </div>
+    
+    <div
+      class="col-md bg-main d-flex justify-content-center align-items-center"
+    >
+      <img src="{% static 'autentication/img/ilustracao.png' %}" alt="" />
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'geral/js/eye.js' %}"></script>
+
+{% endblock 'body' %}
