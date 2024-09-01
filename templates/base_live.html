@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pr-br">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <!-- ===============================================-->
+        <!--    Document Title-->
+        <!-- ===============================================-->
+        <title>{% block 'title' %}{% endblock %}</title>
+
+
+        <!-- ===============================================-->
+        <!--    Favicons-->
+        <!-- ===============================================-->
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/favicon-16x16.png' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/favicon.ico' %}">
+        <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+        <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+        <meta name="theme-color" content="#ffffff">
+
+
+        <!-- ===============================================-->
+        <!--    Stylesheets-->
+        <!-- ===============================================-->
+        <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
+
+        {% block 'head' %}{% endblock 'head' %}
+
+    </head>
+
+    <body>
+
+        {% block 'body' %}{% endblock 'body' %}
+
+            {% comment %} <footer class="footer-botom">
+                {% block footer %} {% endblock %}
+            </footer> {% endcomment %}
+
+        <!-- ===============================================-->
+        <!--    JavaScripts-->
+        <!-- ===============================================-->
+        <script src="{% static 'vendors/@popperjs/popper.min.js' %}"></script>
+        <script src="{% static 'vendors/bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'vendors/is/is.min.js' %}"></script>
+        <script src="https://scripts.sirv.com/sirvjs/v3/sirv.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+        <script src="{% static 'vendors/fontawesome/all.min.js' %}"></script>
+        <script src="{% static 'assets/js/theme.js' %}"></script>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fjalla+One&amp;family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100&amp;display=swap"
+            rel="stylesheet">
+    </body>
+
+
+
+</html>
