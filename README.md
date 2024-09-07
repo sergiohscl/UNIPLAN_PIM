@@ -54,4 +54,7 @@ https://www.djangoproject.com/
     git commit -m 'Mensagem'
     git remote add origin URL_DO_GIT
 
-## implementação de template
+## Django-allauth
+https://docs.allauth.org/en/latest/installation/quickstart.html
+
+https://console.developers.google.com/
