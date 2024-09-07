@@ -1,0 +1,37 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+    <div class="container"><a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/gallery/logo.png' %}" width="118" alt="logo" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"> </span></button>
+      <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
+          <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="#about">Sobre Nós</a></li>
+          <li class="nav-item px-2"><a class="nav-link" href="#departments">Especialidade</a></li>
+          <li class="nav-item px-2"><a class="nav-link" href="#findUs">Contato</a></li>
+          {% if not user.is_authenticated %}
+        </ul><a class="btn btn-sm btn-outline-primary rounded-pill order-1 order-lg-0 ms-lg-4" href="{% url 'login' %}">Login</a>
+        {% else %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="{% url "login" %}" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if user.socialaccount_set.all.0.get_avatar_url %}
+                  <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                      class="rounded-circle"
+                      alt="{{user.username}}"
+                        style="height:40px; width:40px">
+              {% elif user.perfil.foto %}
+                  <img src="{{ user.perfil.foto.url }}"
+                      class="rounded-circle"
+                      alt="{{user.username}}"
+                      style="height:40px; width:40px">
+              {% else %}
+                  <span>Olá, {{ user.username }}.</span>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a style='margin:10px'; 'color: red' href="#" class="dropdown-item">Perfil</a>
+              <a style='margin:10px'; 'color: red' href="{% url "logout" %}" class="dropdown-item">Sair</a>               
+            </ul>
+        </li>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
