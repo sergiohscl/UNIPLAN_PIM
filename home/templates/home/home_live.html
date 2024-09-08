@@ -14,12 +14,14 @@
         <div class="col-md-5 col-xl-6 col-xxl-7 order-0 order-md-1 text-end"><img class="pt-7 pt-md-0 w-100" src="{% static 'assets/img/gallery/hero.png' %}" alt="hero-header" /></div>
         <div class="col-md-75 col-xl-6 col-xxl-5 text-md-start text-center py-6">
           <h1 class="fw-light font-base fs-6 fs-xxl-7">Estamos <strong>determinados </strong>a<br />mudar&nbsp;<strong>sua vida.</strong></h1>
-          <p class="fs-1 mb-5">Você pode obter os cuidados de que precisa 24/7 – seja online ou presencial. Você poderá contar com médicos especialistas e atenciososos. </p><a class="btn btn-lg btn-primary rounded-pill" href="#!" role="button">Marcar Consulta</a>
+          <p class="fs-1 mb-5">Você pode obter os cuidados de que precisa 24 horas por dia e 7 dias da semanas, seja online ou presencial. Você poderá contar com médicos especialistas e atenciososos. </p><a class="btn btn-lg btn-primary rounded-pill" href="#!" role="button">Marcar Consulta</a>
         </div>
       </div>
     </div>
   </section>
 
+  {% include "partials/specialty.html" %}
+  {% include "partials/about.html" %}
   {% include "partials/footer_live.html" %}
 
   {% endblock 'body' %}
