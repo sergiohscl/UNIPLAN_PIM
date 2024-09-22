@@ -85,7 +85,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 5
+SITE_ID = 6
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
