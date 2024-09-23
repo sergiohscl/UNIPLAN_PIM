@@ -26,12 +26,20 @@
                   <span>Olá, {{ user.username }}.</span>
               {% endif %}
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a style='margin:10px'; 'color: red' href="#" class="dropdown-item">Perfil</a>
-              <a style='margin:10px'; 'color: red' href="{% url "logout" %}" class="dropdown-item">Sair</a>               
-            </ul>
+
+            <ul class="dropdown-menu dropdown-menu-end bg-dark p-2 w-25" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                  <a href="#" class="dropdown-item text-secondary px-3"><strong>Perfil</strong></a>
+              </li>
+              <li>
+                  <div class="dropdown-divider bg-light"></div>
+                  <a href="{% url 'logout' %}" class="dropdown-item text-danger px-3"><strong>Sair</strong></a>
+              </li>
+          </ul>
+                  
         </li>
-        {% endif %}
+        {% endif %}        
+
       </div>
     </div>
   </nav>

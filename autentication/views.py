@@ -69,7 +69,7 @@ def processa_logout(request):
         pass
 
     auth.logout(request)
-    return redirect('login')
+    return redirect('home')
 
 
 def processa_redirect_home(request):
