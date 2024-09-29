@@ -24,87 +24,64 @@
             <br />
             <section class="cont-logo">
               <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
-              <label class="text-logo">HEALING</label>
+              <label class="text-logo" style="color: #09A6A3">HEALING</label>
             </section>
             <hr />
-
-            <form action="{% url 'editar_perfil_doctor' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                
-                <!-- Informações do Usuário -->
-                <h4 class="fonte-destaque1">Editar Informações do Médico</h4>
-                               
-                <hr>
-                
-                <div class="mb-3 d-flex justify-content-center">                 
-                   <p style="font-size: 25px" class="p-bold">Olá, <span class="color-dark">{{request.user.username}}.</span></p>
-                </div>
-
-                <div class="mb-3 d-flex justify-content-center">                   
-                    <img src="{{ user.perfil.foto.url }}" class="rounded-circle" style="width: 120px;" alt="Avatar" />                   
-                 </div>
-                
-  
-                <div class="mb-3">                   
-                  <label for="id_avatar" class="form-label">Foto de Perfil</label>
-                  {{ perfil_form.foto }}
-                  <div class="text-danger">{{ perfil_form.foto.errors }}</div>
-                </div>
-  
-                <!-- Informações Médicas -->
+             <!-- Informações do Usuário -->
+             
+             <div class="mb-3 d-flex justify-content-center">                 
+               <p style="font-size: 25px" class="p-bold">Olá, <span class="color-dark">{{request.user.first_name}}</span></p>
+              </div>
               
-                <div class="mb-3">
-                  <label for="id_specialty" class="form-label">Especialidade</label>
-                  {{ perfil_doctor_form.specialty }}
-                  <div class="text-danger">{{ perfil_doctor_form.specialty.errors }}</div>
-                </div>
-                                 
-                <div class="row">
-                    <div class="col-md">
-                        <div class="mb-3">
-                            <label for="id_city" class="form-label">Cidade</label>
-                            {{ perfil_doctor_form.city }}
-                            <div class="text-danger">{{ perfil_doctor_form.city.errors }}</div>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="mb-3">
-                            <label for="id_country" class="form-label">País</label>
-                            {{ perfil_doctor_form.country }}
-                            <div class="text-danger">{{ perfil_doctor_form.country.errors }}</div>
-                        </div>
-                    </div>
-                </div>
-  
-                <div class="mb-3">
-                  <label for="id_telefone" class="form-label">Telefone</label>
-                  {{ perfil_doctor_form.telefone }}
-                  <div class="text-danger">{{ perfil_doctor_form.telefone.errors }}</div>
-                </div>
-  
-                <div class="mb-3">
-                  <label for="id_price" class="form-label">Preço da Consulta</label>
-                  {{ perfil_doctor_form.price }}
-                  <div class="text-danger">{{ perfil_doctor_form.price.errors }}</div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="id_description" class="form-label">Descrição</label>
-                    {{ perfil_doctor_form.description }}
-                    <div class="text-danger">{{ perfil_doctor_form.description.errors }}</div>
-                  </div>
-                
-                <div class="d-grid">
-                  <button type="submit" class="btn btn-success btn-dark-color">Salvar Alterações</button>
-                </div>
-                <br>
-                <div class="d-grid">
-                  <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
-               </div>
-              </form>
-
-          </div>
+              <div class="mb-3 d-flex justify-content-center">                   
+                <img src="{{ user.perfil.foto.url }}" class="rounded-circle" style="width: 120px;" alt="Avatar" />                   
+              </div>
+              
+              {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+              <hr>
+              
+          <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ perfil_form.as_p }}
+              {{ perfil_doctor_form.as_p }}
+              
+              <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-dark-color">Salvar Alterações</button>
+              </div>
+              <br>
+              <div class="d-grid">
+                <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
+              </div>
+          </form>
+    
+          {% if perfil_form.errors %}
+              <ul class="errorlist">
+                  {% for field in perfil_form %}
+                      {% for error in field.errors %}
+                          <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                      {% endfor %}
+                  {% endfor %}
+              </ul>
+          {% endif %}
+      
+          {% if perfil_doctor_form.errors %}
+              <ul class="errorlist">
+                  {% for field in perfil_doctor_form %}
+                      {% for error in field.errors %}
+                          <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                      {% endfor %}
+                  {% endfor %}
+              </ul>
+          {% endif %}
+           
         </div>
+      </div>
         
         <!-- Ilustração -->
         <div class="col-md bg-main d-flex justify-content-center align-items-center">

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Perfil
-from accounts.usuario_form import PerfilForm, UserForm
+from accounts.usuario_form import PerfilForm
 from .models import AvailableDate, PerfilDoctor, is_medico
 from .forms import PerfilDoctorForm
 from django.contrib import messages
@@ -49,33 +49,29 @@ def editar_perfil_doctor(request):
         perfil = Perfil.objects.get(user=user)
         perfil_doctor = PerfilDoctor.objects.get(perfil=perfil)
     except (Perfil.DoesNotExist, PerfilDoctor.DoesNotExist):
+        messages.error(request, "Perfil ou perfil de médico não encontrado.")
         return redirect('home')
 
     if request.method == 'POST':
         # Instancia os formulários com os dados do POST e arquivos
-        user_form = UserForm(request.POST, instance=user)
         perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
-        perfil_doctor_form = PerfilDoctorForm(
-            request.POST, instance=perfil_doctor
-        ) 
+        perfil_doctor_form = PerfilDoctorForm(request.POST, instance=perfil_doctor) # noqa E501
 
-        # Verifica se todos os formulários são válidos
-        if user_form.is_valid() and perfil_form.is_valid() and perfil_doctor_form.is_valid(): # noqa E501
-            # Salva os formulários no banco de dados
-            user_form.save()
+        # Verifica se os formulários são válidos
+        if perfil_form.is_valid() and perfil_doctor_form.is_valid():
             perfil_form.save()
             perfil_doctor_form.save()
 
-            # Redireciona após salvar
+            messages.success(request, "Perfil atualizado com sucesso.")
             return redirect('perfil_doctor')
+        else:
+            messages.error(request, "Houve um erro ao atualizar o perfil. Verifique os campos.") # noqa E501
     else:
         # Instancia os formulários com os dados do objeto existente
-        user_form = UserForm(instance=user)
         perfil_form = PerfilForm(instance=perfil)
         perfil_doctor_form = PerfilDoctorForm(instance=perfil_doctor)
 
     return render(request, 'doctors/perfil_doctor_form.html', {
-        'user_form': user_form,
         'perfil_form': perfil_form,
         'perfil_doctor_form': perfil_doctor_form
     })

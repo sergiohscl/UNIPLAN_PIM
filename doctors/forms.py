@@ -6,12 +6,16 @@ class PerfilDoctorForm(forms.ModelForm):
     class Meta:
         model = PerfilDoctor
         fields = [
-            'specialty', 'price', 'crm', 'city',
+            'specialty', 'price', 'city',
             'country', 'telefone', 'description'
         ]
-
-    def __init__(self, *args, **kwargs):
-        super(PerfilDoctorForm, self).__init__(*args, **kwargs)
-        # Aplica a classe 'form-control' do Bootstrap 5 a todos os campos
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+        widgets = {
+            'specialty': forms.Select(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            # 'crm': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), # noqa E501
+        }
