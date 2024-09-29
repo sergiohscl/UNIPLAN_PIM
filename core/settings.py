@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from django.contrib.messages import constants
 import os
 from pathlib import Path
 
@@ -44,6 +45,8 @@ INSTALLED_APPS = [
     'autentication.apps.AutenticationConfig',
     'accounts.apps.AccountsConfig',
     'contact.apps.ContactConfig',
+    'doctors.apps.DoctorsConfig',
+
     'widget_tweaks',
     'allauth',
     'allauth.account',
@@ -75,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'doctors.context_processors.medico_context',                
             ],
         },
     },
@@ -85,7 +89,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 7
+SITE_ID = 8
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -156,3 +160,13 @@ EMAIL_HOST_PASSWORD = 'jnpbeiwwdlmifqyp'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
+
+# Messages
+
+MESSAGE_TAGS = {
+    constants.DEBUG: 'alert-primary',
+    constants.ERROR: 'alert-danger',
+    constants.SUCCESS: 'alert-success',
+    constants.INFO: 'alert-info',
+    constants.WARNING: 'alert-warning',
+}

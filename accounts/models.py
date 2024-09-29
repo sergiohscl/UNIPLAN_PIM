@@ -5,11 +5,23 @@ from django.dispatch import receiver
 
 
 class Perfil(models.Model):
+    class Sexo(models.TextChoices):
+        MASCULINO = 'M', 'Masculino'
+        FEMININO = 'F', 'Feminino'
+        OUTRO = 'O', 'Outro'
+
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True
     )
     foto = models.ImageField(
         blank=True, null=True, default='', upload_to='contas/imagens'
+    )
+    sexo = models.CharField(
+        max_length=1,
+        choices=Sexo.choices,
+        default='',
+        blank=True,
+        null=True
     )
 
     def __str__(self):

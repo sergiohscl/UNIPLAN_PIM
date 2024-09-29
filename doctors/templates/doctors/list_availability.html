@@ -1,0 +1,7 @@
+{% comment %} <h2>Disponibilidades</h2> 
+<ul>
+    {% for disponibilidade in disponibilidades %}
+        <li>{{ disponibilidade }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'add_availability' %}">Adicionar Nova Disponibilidade</a> {% endcomment %}
