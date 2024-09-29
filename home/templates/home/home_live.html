@@ -1,6 +1,6 @@
 {% extends "base_live.html" %}
 {% load static %}
-
+{% block 'title' %} Home {% endblock 'title' %}
 {% block 'body' %}
 {% include "partials/navbar_live.html" %}
 
@@ -21,7 +21,7 @@
   </section>
 
   {% include "partials/specialty.html" %}
-  {% include "partials/carousel.html" %}
+  {% include "partials/carousel.html" with medicos_grouped=medicos_grouped %}
   {% include "partials/about.html" %}
   {% include "partials/footer_live.html" %}
 

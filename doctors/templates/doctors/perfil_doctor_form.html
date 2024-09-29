@@ -1,32 +1,26 @@
+{% extends "base_live.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{% static 'geral/css/base.css' %}" />      
-
-    <title>Editar Perfil Médico</title>
-    <link
+{% block 'title' %} Perfil Doctor {% endblock 'title' %}
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'geral/css/base.css' %}" /> 
+<link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'autentication/css/autentication.css' %}" />
-  </head>
+{% endblock 'head' %}
 
-  <body>
+  {% block 'body' %}
     <div class="container-fluid">
       <div class="row">
         <!-- Formulário de Edição -->
         <div class="col-md d-flex justify-content-center">
           <div class="cont-cadastro">
-            <br />
-            <section class="cont-logo">
               <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
               <label class="text-logo" style="color: #09A6A3">HEALING</label>
-            </section>
-            <hr />
+          
+              <hr />
              <!-- Informações do Usuário -->
              
              <div class="mb-3 d-flex justify-content-center">                 
@@ -46,42 +40,42 @@
               {% endif %}
               <hr>
               
-          <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ perfil_form.as_p }}
-              {{ perfil_doctor_form.as_p }}
-              
-              <div class="d-grid">
-                <button type="submit" class="btn btn-success btn-dark-color">Salvar Alterações</button>
-              </div>
-              <br>
-              <div class="d-grid">
-                <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
-              </div>
-          </form>
+              <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ perfil_form.as_p }}
+                  {{ perfil_doctor_form.as_p }}
+                  
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-dark-color">Salvar Alterações</button>
+                  </div>
+                  <br>
+                  <div class="d-grid">
+                    <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
+                  </div>
+              </form>
     
-          {% if perfil_form.errors %}
-              <ul class="errorlist">
-                  {% for field in perfil_form %}
-                      {% for error in field.errors %}
-                          <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+              {% if perfil_form.errors %}
+                  <ul class="errorlist">
+                      {% for field in perfil_form %}
+                          {% for error in field.errors %}
+                              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                          {% endfor %}
                       {% endfor %}
-                  {% endfor %}
-              </ul>
-          {% endif %}
-      
-          {% if perfil_doctor_form.errors %}
-              <ul class="errorlist">
-                  {% for field in perfil_doctor_form %}
-                      {% for error in field.errors %}
-                          <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                  </ul>
+              {% endif %}
+          
+              {% if perfil_doctor_form.errors %}
+                  <ul class="errorlist">
+                      {% for field in perfil_doctor_form %}
+                          {% for error in field.errors %}
+                              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                          {% endfor %}
                       {% endfor %}
-                  {% endfor %}
-              </ul>
-          {% endif %}
+                  </ul>
+              {% endif %}
            
+          </div>
         </div>
-      </div>
         
         <!-- Ilustração -->
         <div class="col-md bg-main d-flex justify-content-center align-items-center">
@@ -91,5 +85,6 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  
+  {% endblock 'body' %}
 </html>
