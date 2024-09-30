@@ -1,6 +1,6 @@
 {% extends "base_live.html" %}
 {% load static %}
-{% block 'title' %} Perfil Doctor {% endblock 'title' %}
+{% block 'title' %} Especialidades {% endblock 'title' %}
 {% block 'head' %}
 <link rel="stylesheet" href="{% static 'geral/css/base.css' %}" /> 
 <link
@@ -16,7 +16,7 @@
       <div class="row">
         <!-- Formulário de Edição -->
         <div class="col-md d-flex justify-content-center">
-          <div class="cont-cadastro">
+            <div class="cont-cadastro">
               <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
               <label class="text-logo" style="color: #09A6A3">HEALING</label>
           
@@ -40,7 +40,8 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
+              </div>
+              
             </div>
       </div>
     </div>
