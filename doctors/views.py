@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm
-from .models import AvailableDate, PerfilDoctor, is_medico
+from .models import AvailableDate, PerfilDoctor, Specialties, is_medico
 from .forms import PerfilDoctorForm
 from django.contrib import messages
 from django.contrib.messages import constants
@@ -143,47 +143,16 @@ def open_schedule(request):
         return redirect('/doctors/open_schedule')
 
 
-# @login_required
-# def open_schedule(request):
+def list_doctor_specialty(request, specialty):
+    # Busca a especialidade pelo nome
+    specialty_obj = get_object_or_404(Specialties, specialty=specialty)
 
-#     if not is_medico(request.user):
-#         messages.add_message(
-#             request, constants.WARNING,
-#             'Somente médicos podem acessar essa página.'
-#         )
-#         return redirect('home')
+    # Filtra os médicos com essa especialidade
+    medicos = PerfilDoctor.objects.filter(specialty=specialty_obj)
 
-#     if request.method == "GET":
-#         dados_medicos = PerfilDoctor.objects.get(user=request.user)
-#         datas_abertas = AvailableDate.objects.filter(user=request.user)
-#         return render(
-#             request, 'open_schedule.html',
-#             {
-#                 'dados_medicos': dados_medicos,
-#                 'datas_abertas': datas_abertas,
-#                 'is_medico': is_medico(request.user)
-#             }
-#         )
-#     elif request.method == "POST":
-#         data = request.POST.get('data')
-
-#         data_formatada = datetime.strptime(data, "%Y-%m-%dT%H:%M")
-
-#         if data_formatada <= datetime.now():
-#             messages.add_message(
-#                 request, constants.WARNING,
-#                 'A data deve ser maior ou igual a data atual.'
-#             )
-#             return redirect('/doctors/open_schedule')
-
-#         horario_abrir = AvailableDate(
-#             data=data,
-#             user=request.user
-#         )
-
-#         horario_abrir.save()
-
-#         messages.add_message(
-#             request, constants.SUCCESS, 'Horário cadastrado com sucesso.'
-#         )
-#         return redirect('/doctors/open_schedule')
+    # Renderiza o template com os médicos filtrados
+    return render(
+        request,
+        'doctors/list_doctor_specialty.html',
+        {'medicos': medicos, 'specialty': specialty_obj.specialty}
+    )
