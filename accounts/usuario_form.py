@@ -52,6 +52,23 @@ class UserForm(ModelForm):
 class PerfilForm(ModelForm):
     class Meta:
         model = Perfil
-        fields = ['foto', ]
+        fields = [
+            'foto', 'cpf', 'city', 'country',
+            'telefone', 'sexo', 'data_nasc']
 
-    widget = {'foto': forms.ImageField()}
+        widgets = {
+            'foto': forms.FileInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'sexo': forms.Select(attrs={'class': 'form-control'}),
+            'data_nasc': forms.DateInput(
+                attrs={'class': 'form-control', 'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['data_nasc'].input_formats = ['%Y-%m-%d']

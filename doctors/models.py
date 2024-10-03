@@ -26,10 +26,6 @@ class PerfilDoctor(models.Model):
     )
     price = models.FloatField(default=100)
     crm = models.CharField(max_length=30)
-    cpf = models.CharField(max_length=11, unique=True)
-    city = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    telefone = models.CharField(max_length=15)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):

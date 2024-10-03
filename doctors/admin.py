@@ -9,9 +9,11 @@ class SpecialtiesAdmin(admin.ModelAdmin):
 
 @admin.register(PerfilDoctor)
 class PerfilDoctorAdmin(admin.ModelAdmin):
-    list_display = ('perfil', 'specialty', 'crm', 'city', 'country')
-    search_fields = ('perfil__user__username', 'crm', 'city', 'country')
-    list_filter = ('specialty', 'city', 'country')
+    list_display = (
+        'perfil', 'specialty', 'crm', 'description'
+    )
+    search_fields = ('perfil__user__username', 'crm')
+    list_filter = ('specialty', )
 
 
 @admin.register(AvailableDate)

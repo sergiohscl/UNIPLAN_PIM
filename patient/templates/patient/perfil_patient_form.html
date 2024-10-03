@@ -27,8 +27,13 @@
                <p style="font-size: 25px" class="p-bold">Olá, <span class="color-dark">{{request.user.first_name}}</span></p>
               </div>
               
-              <div class="mb-3 d-flex justify-content-center">                   
-                <img src="{{ user.perfil.foto.url }}" class="rounded-circle" style="width: 120px;" alt="Avatar" />                   
+              <div class="mb-3 d-flex justify-content-center"> 
+                {% if user.perfil.foto and user.perfil.foto.url %}
+                  <img src="{{ user.perfil.foto.url }}" 
+                      class="rounded-circle" 
+                      style="width: 120px;" 
+                      alt="Avatar" />                   
+                {% endif %}                
               </div>
               
               {% if messages %}
@@ -43,8 +48,8 @@
               <form method="post" enctype="multipart/form-data">
                   {% csrf_token %}
                   {{ perfil_form.as_p }}
-                  {{ perfil_doctor_form.as_p }}
-             
+                  {{ perfil_patient_form.as_p }}
+                  
                   <div class="d-grid">
                     <button type="submit" class="btn btn-success btn-dark-color">Salvar Alterações</button>
                   </div>
@@ -64,9 +69,9 @@
                   </ul>
               {% endif %}
           
-              {% if perfil_doctor_form.errors %}
+              {% if perfil_patient_form.errors %}
                   <ul class="errorlist">
-                      {% for field in perfil_doctor_form %}
+                      {% for field in perfil_patient_form %}
                           {% for error in field.errors %}
                               <li><strong>{{ field.label }}:</strong> {{ error }}</li>
                           {% endfor %}

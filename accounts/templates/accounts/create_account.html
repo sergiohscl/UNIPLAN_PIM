@@ -8,8 +8,7 @@
   <div class="row">
     <div class="col-md d-flex justify-content-center">
       <div class="cont-cadastro">
-        <br />
-        <br />
+      
         <section class="cont-logo">
           <img class="logo" src="{% static "geral/img/logo.png" %}">
           <label class="text-logo">HEALING</label>
@@ -99,13 +98,71 @@
           </div>
           
            <!-- Profile Picture -->
-           <div class="mb-3">
-            <label for="id_foto" class="form-label">Perfil Foto</label>
-            {{ form_perfil.foto }}
-            <div class="text-danger">
-                {{ form_perfil.foto.errors }}
+            <div class="mb-3">
+              <label for="id_foto" class="form-label">Perfil Foto</label>
+              {{ form_perfil.foto }}
+              <div class="text-danger">
+                  {{ form_perfil.foto.errors }}
+              </div>
+              </div>
+
+            <!-- CPF -->
+            <div class="mb-3">
+              <label for="id_cpf" class="form-label">CPF</label>
+              {{ form_perfil.cpf }}
+              <div class="text-danger">
+                  {{ form_perfil.cpf.errors }}
+              </div>
             </div>
-          </div>
+            <div class="row">
+            <!-- Cidade -->
+              <div class="col-md"> 
+                <div class="mb-3">
+                  <label for="id_city" class="form-label">Cidade</label>
+                  {{ form_perfil.city }}
+                  <div class="text-danger">
+                      {{ form_perfil.city.errors }}
+                  </div>
+                </div>
+              </div>
+
+                <!-- País -->
+              <div class="col-md">
+                <div class="mb-3">
+                  <label for="id_country" class="form-label">País</label>
+                  {{ form_perfil.country }}
+                  <div class="text-danger">
+                      {{ form_perfil.country.errors }}
+                  </div>
+                </div>
+              </div>
+            </div>  
+            <!-- Telefone -->
+            <div class="mb-3">
+              <label for="id_telefone" class="form-label">Telefone</label>
+              {{ form_perfil.telefone }}
+              <div class="text-danger">
+                  {{ form_perfil.telefone.errors }}
+              </div>
+            </div>
+
+            <!-- Sexo -->
+            <div class="mb-3">
+              <label for="id_sexo" class="form-label">Sexo</label>
+              {{ form_perfil.sexo }}
+              <div class="text-danger">
+                  {{ form_perfil.sexo.errors }}
+              </div>
+            </div>
+
+            <!-- Data de Nascimento -->
+            <div class="mb-3">
+              <label for="id_data_nasc" class="form-label">Data de Nascimento</label>
+              {{ form_perfil.data_nasc }}
+              <div class="text-danger">
+                  {{ form_perfil.data_nasc.errors }}
+              </div>
+            </div>
                     
           <div class="d-grid">
             <button type="submit" class="btn btn-success btn-dark-color">Cadastrar</button>

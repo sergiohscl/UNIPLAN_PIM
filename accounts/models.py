@@ -16,6 +16,10 @@ class Perfil(models.Model):
     foto = models.ImageField(
         blank=True, null=True, default='', upload_to='contas/imagens'
     )
+    cpf = models.CharField(max_length=11, unique=True)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    telefone = models.CharField(max_length=19)
     sexo = models.CharField(
         max_length=1,
         choices=Sexo.choices,
@@ -23,6 +27,7 @@ class Perfil(models.Model):
         blank=True,
         null=True
     )
+    data_nasc = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

@@ -4,6 +4,8 @@ import re
 from django.db import IntegrityError, transaction
 from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm, UserForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def validou_email(email):
@@ -100,3 +102,60 @@ def create_account(request):
         return render(request, 'accounts/create_account.html', {'form': user_form, 'form_perfil': perfil_form}) # noqa E501
     else:
         return render(request, 'accounts/create_account.html', {'form': UserForm(), 'form_perfil': PerfilForm()}) # noqa E501
+
+
+# @login_required
+# def edit_profile(request):
+#     user = request.user
+#     perfil = user.perfil  # Perfil associado ao usuário logado
+
+#     if request.method == 'POST':
+#         user_form = UserForm(request.POST, instance=user)
+#         perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil) # noqa E501
+
+#         if user_form.is_valid() and perfil_form.is_valid():
+#             user_form.save()
+#             perfil_form.save()
+#             messages.success(request, "Perfil atualizado com sucesso.")
+#             return redirect('edit_profile')
+
+#         else:
+#             messages.error(
+#                 request,
+#                 "Houve um erro ao atualizar o perfil. Verifique os campos."
+#             )
+
+#     else:
+#         user_form = UserForm(instance=user)
+#         perfil_form = PerfilForm(instance=perfil)
+
+#     return render(request, 'accounts/edit_profile.html', {
+#         'user_form': user_form,
+#         'perfil_form': perfil_form
+#     })
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    perfil = user.perfil  # Perfil associado ao usuário logado
+
+    if request.method == 'POST':
+        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
+
+        if perfil_form.is_valid():
+            perfil_form.save()
+            messages.success(request, "Perfil atualizado com sucesso.")
+            return redirect('edit_profile')
+
+        else:
+            messages.error(
+                request,
+                "Houve um erro ao atualizar o perfil. Verifique os campos."
+            )
+
+    else:
+        perfil_form = PerfilForm(instance=perfil)
+
+    return render(request, 'accounts/edit_profile.html', {
+        'perfil_form': perfil_form
+    })

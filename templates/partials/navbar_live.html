@@ -53,7 +53,7 @@
                                      alt="{{user.username}}"
                                      style="height:40px; width:40px">
                             {% else %}
-                                <span>Olá, {{ user.username }}.</span>
+                                <span>Olá, {{ request.user.first_name }}.</span>
                             {% endif %}
                         </a>
 
@@ -65,7 +65,7 @@
                                     <a href="{% url 'logout' %}" class="dropdown-item text-danger px-3"><strong>Sair</strong></a>
                                 </li>
                             {% else %}
-                                <li><a href="#" class="dropdown-item text-secondary px-3"><strong>Perfil</strong></a></li>
+                                <li><a href="{% url 'edit_profile' %}" class="dropdown-item text-secondary px-3"><strong>Perfil</strong></a></li>
                                 <li>
                                     <div class="dropdown-divider bg-light"></div>
                                     <a href="{% url 'logout' %}" class="dropdown-item text-danger px-3"><strong>Sair</strong></a>

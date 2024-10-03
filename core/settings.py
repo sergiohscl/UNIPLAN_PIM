@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'contact.apps.ContactConfig',
     'doctors.apps.DoctorsConfig',
+    'patient.apps.PatientConfig',
 
     'widget_tweaks',
     'allauth',
@@ -89,7 +90,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 8
+SITE_ID = 12
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
