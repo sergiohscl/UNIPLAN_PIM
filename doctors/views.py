@@ -156,3 +156,13 @@ def list_doctor_specialty(request, specialty):
         'doctors/list_doctor_specialty.html',
         {'medicos': medicos, 'specialty': specialty_obj.specialty}
     )
+
+
+def doctor_detail(request, doctor_id):
+    doctor = get_object_or_404(PerfilDoctor, id=doctor_id)
+    
+    return render(
+        request,
+        "doctors/doctor_detail.html",
+        {'doctor': doctor}
+    )

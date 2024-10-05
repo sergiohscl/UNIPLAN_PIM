@@ -29,7 +29,9 @@
                                             <p class="text-600 mb-0">valor da consulta</p>
                                             <p class="text-600 mb-4">{{ medico.price|floatformat:"2" }}</p>
                                             <div class="text-center">
-                                                <button class="btn btn-outline-secondary rounded-pill" type="submit">Ver perfil</button>
+                                                <button class="btn btn-outline-secondary rounded-pill" type="button" onclick="window.location.href='{% url 'doctor_detail' doctor_id=medico.id %}'">
+                                                    Ver perfil
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
