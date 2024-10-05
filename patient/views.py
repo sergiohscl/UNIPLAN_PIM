@@ -1,105 +1,102 @@
 from datetime import datetime
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from doctors.models import AvailableDate, PerfilDoctor, Specialties, is_medico
+from doctors.models import (
+    AvailableDate, PerfilDoctor, Specialties
+)
 from django.contrib.messages import constants
 from django.contrib import messages
-
-from patient.models import Consulta, Document
-
-
-@login_required
-def choose_time(request, id_dados_medicos):
-    if request.method == "GET":
-        medico = PerfilDoctor.objects.get(id=id_dados_medicos)
-        available_date = AvailableDate.objects.filter(
-            user=medico.perfil.user
-        ).filter(data__gte=datetime.now()).filter(scheduled=False)
-        return render(
-            request, 'escolher_horario.html',
-            {
-                'medico': medico,
-                'datas_abertas': available_date,
-                'is_medico': is_medico(request.user)
-            }
-        )
+from patient.models import Consulta
 
 
 @login_required
-def schedule_time(request, id_data_aberta):
-    if request.method == "GET":
-        available_date = AvailableDate.objects.get(id=id_data_aberta)
+def marcar_consulta(request):
+    specialty_id = request.GET.get('specialty')
+    selected_specialty = None
+    doctors = None
+    available_dates = {}
 
-        scheduled_time = Consulta(
-            patient=request.user,
-            available_date=available_date
-        )
+    print(request.user.perfil)
+    print(f"Paciente: {request.user.perfil}")
 
-        scheduled_time.save()
+    if specialty_id:
+        selected_specialty = get_object_or_404(Specialties, id=specialty_id)
+        doctors = PerfilDoctor.objects.filter(specialty=selected_specialty)
 
-        available_date.scheduled = True
-        available_date.save()
+        for doctor in doctors:
+            available_dates[doctor.id] = AvailableDate.objects.filter(
+                doctor=doctor, scheduled=False
+            )
 
-        messages.add_message(
-            request, constants.SUCCESS, 'Cosnulta agendada com sucesso.'
-        )
+            # Processa o formulário de agendamento
+            if request.method == 'POST':
+                print("Método: ", request.method)  # Verifica o método
+                print("Formulário submetido com sucesso.")
+                for doctor in doctors:
+                    selected_date_id = request.POST.get(f'selected_date_{doctor.id}')  # noqa E501
 
-        return redirect('patient/my_queries/')
+                    selected_time_str = request.POST.get(f'selected_time_{doctor.id}')  # noqa E501
+
+                    print(f"Data selecionada: {selected_date_id}, Hora selecionada: {selected_time_str}") # noqa E501
+
+                    if selected_date_id and selected_time_str:
+                        try:
+                            # Recupera a data disponível
+                            selected_date = AvailableDate.objects.get(
+                                id=selected_date_id
+                            )
+
+                            selected_time = datetime.strptime(
+                                selected_time_str, '%H:%M'
+                            ).time()
+
+                            # Verifica se o paciente e a data são válidos
+                            print(f"Paciente: {request.user.perfil}, Médico: {doctor}, Data: {selected_date}, Hora: {selected_time}") # noqa E501
+                            print(f"Data: {selected_date}")
+                            print(f"Hora: {selected_time}")
+                            # Cria a consulta
+                            Consulta.objects.create(
+                                patient=request.user.perfil,
+                                available_date=selected_date,
+                                available_time=selected_time,
+                                status='A'
+                            )
+
+                            # Marcar a data como agendada
+                            selected_date.scheduled = True
+                            selected_date.save()
+
+                            # Mensagem de sucesso
+                            messages.add_message(request, constants.SUCCESS, f"Consulta agendada com o Dr. {doctor.perfil.user.first_name} com sucesso!") # noqa E501
+                            return redirect('my_queries')
+
+                        except AvailableDate.DoesNotExist:
+                            messages.add_message(
+                                request, constants.ERROR, "Data inválida."
+                            )
+                            print("Data não encontrada.")
+
+    specialties = Specialties.objects.all()
+
+    context = {
+        'specialties': specialties,
+        'selected_specialty': selected_specialty,
+        'doctors': doctors,
+        'available_dates': available_dates,
+    }
+
+    return render(request, 'patient/marcar_consulta.html', context)
 
 
 @login_required
 def my_queries(request):
-    data = request.GET.get("data")
-    specialty = request.GET.get("specialty")
+    # Busca todas as consultas do paciente logado
+    consultas = Consulta.objects.filter(
+        patient=request.user.perfil
+    ).order_by('available_date__date')
 
-    my_queries = Consulta.objects.filter(
-        paciente=request.user
-    ).filter(available_date__data__gte=datetime.now())
+    context = {
+        'consultas': consultas
+    }
 
-    if data:
-        my_queries = my_queries.filter(data_aberta__data__gte=data)
-
-    if specialty:
-        my_queries = my_queries.filter(
-            available_date__user__perfil_doctor__specialty__id=specialty
-        )
-
-    specialty = Specialties.objects.all()
-    return render(
-        request, 'my_queries.html',
-        {
-            'my_queries': my_queries,
-            'specialty': specialty,
-            'is_medico': is_medico(request.user)
-        }
-    )
-
-
-@login_required
-def consulta(request, id_consulta):
-    if request.method == 'GET':
-        consulta = Consulta.objects.get(id=id_consulta)
-        dado_medico = PerfilDoctor.objects.get(user=consulta.data_aberta.user)
-        documentos = Document.objects.filter(consulta=consulta)
-        return render(
-            request, 'consulta.html',
-            {
-                'consulta': consulta,
-                'dado_medico': dado_medico,
-                'documentos': documentos
-            }
-        )
-
-
-@login_required
-def cancel_consulta(request, id_consulta):
-    consulta = Consulta.objects.get(id=id_consulta)
-    if request.user != consulta.patient:
-        messages.add_message(
-            request, constants.ERROR, 'Essa consulta não é sua!'
-        )
-        return redirect('home')
-
-    consulta.status = 'C'
-    consulta.save()
-    return redirect(f'/pactent/consulta/{id_consulta}')
+    return render(request, 'patient/my_queries.html', context)

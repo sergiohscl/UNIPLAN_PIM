@@ -39,3 +39,12 @@ class AvailableDate(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+
+class AvailableTime(models.Model):
+    available_date = models.ForeignKey(AvailableDate, on_delete=models.CASCADE)
+    time = models.TimeField()  # Horário disponível
+    scheduled = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.available_date.date} - {self.time} ({self.available_date.doctor.perfil.user.username})" # noqa E501

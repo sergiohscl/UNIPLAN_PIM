@@ -1,7 +1,5 @@
 from django.contrib.auth.models import User
-# from django.db import models
 from django.db.models.signals import post_save
-# from django.dispatch import receiver
 from faker import Faker
 from validate_docbr import CPF
 import os
@@ -107,13 +105,6 @@ def create_users_and_doctors(qtd_users, qtd_medicos):
                 crm=crm, description=description
             )
 
-            # # Gerar algumas datas de disponibilidade
-            # for _ in range(random.randint(1, 5)):
-            #     AvailableDate.objects.create(
-            #         doctor=doctor_profile,  # PerfilDoctor do médico
-            #         date=fake.date_this_year(),
-            #     )
-
         print(f'{qtd_users} usuários comuns e {qtd_medicos} médicos criados com sucesso!') # noqa E501
 
     finally:
@@ -123,4 +114,4 @@ def create_users_and_doctors(qtd_users, qtd_medicos):
 
 
 if __name__ == "__main__":
-    create_users_and_doctors(30, 30)
+    create_users_and_doctors(10, 30)

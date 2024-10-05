@@ -1,0 +1,138 @@
+{% extends "base_live.html" %}
+{% load static %}
+{% load custom_filter %}
+{% block 'title' %} Marcar Consulta {% endblock 'title' %}
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'geral/css/base.css' %}" /> 
+<link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'autentication/css/autentication.css' %}" />
+{% endblock 'head' %}
+
+{% block 'body' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md d-flex justify-content-center">
+          <div class="cont-cadastro">
+            <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
+            <label class="text-logo" style="color: #09A6A3">HEALING</label>
+        
+            <hr />
+
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+
+            <div class="container mt-5">
+                <h2 class="mb-4">Marcar Consulta</h2>
+
+                <!-- Filtro de especialidade -->
+
+                <form method="GET" class="mb-4">
+                    <div class="form-group row">
+                        <label for="specialty" class="col-sm-2 col-form-label">Escolha uma especialidade:</label>
+                        <div class="col-sm-6">
+                            <select class="form-select" name="specialty" id="specialty" onchange="this.form.submit()">
+                                <option value="">Selecione...</option>
+                                {% for specialty in specialties %}
+                                    <option value="{{ specialty.id }}" {% if selected_specialty and selected_specialty.id == specialty.id %}selected{% endif %}>
+                                        {{ specialty.specialty }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form> 
+
+                <!-- Lista de médicos e datas disponíveis -->  
+
+                {% if doctors %}
+                {% for doctor in doctors %}
+                    <form method="POST" action="{% url 'my_queries' %}">
+                        {% csrf_token %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Médico</th>
+                                        <th>Especialidade</th>
+                                        <th>Preço Consulta (R$)</th>
+                                        <th>Datas Disponíveis</th>
+                                        <th>Horários</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>               
+                                    <tr>
+                                        <!-- Avatar do médico -->
+                                        <td>
+                                            {% if doctor.perfil.foto %}
+                                                <img src="{{ doctor.perfil.foto.url }}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
+                                            {% else %}
+                                                <img src="{% static 'assets/img/galery/avatar.png' %}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
+                                            {% endif %}
+                                        </td>
+                                        
+                                        <!-- Nome do médico -->
+                                        <td>{{ doctor.perfil.user.first_name }} {{ doctor.perfil.user.last_name }}</td>
+                                        
+                                        <!-- Especialidade -->
+                                        <td>{{ doctor.specialty.specialty }}</td>
+                                        
+                                        <!-- Preço da consulta -->
+                                        <td>R$ {{ doctor.price|floatformat:"2" }}</td>
+                                        
+                                        <!-- Datas disponíveis -->
+                                        <td>
+                                            <select class="form-select" name="selected_date_{{ doctor.id }}">
+                                                <option value="">Escolha uma data...</option>
+                                                {% with available_dates|get_item:doctor.id as dates %}
+                                                    {% if dates %}
+                                                        {% for date in dates %}
+                                                            <option value="{{ date.id }}">{{ date.date }}</option>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <option value="">Nenhuma data disponível</option>
+                                                    {% endif %}
+                                                {% endwith %}
+                                            </select>
+                                        </td>
+
+                                        <!-- Horário -->
+                                        <td>  
+                                            <input type="time" class="form-control" name="selected_time_{{ doctor.id }}" required>
+                                        </td>
+                                    
+                                        <!-- Botão Agendar -->
+                                        <td>
+                                            {% if available_dates|get_item:doctor.id %}                                       
+                                                    <button type="submit" class="btn btn-success">Agendar</button>                                       
+                                            {% else %}
+                                                <button class="btn btn-secondary d-flex justify-content-center align-items-center" disabled style="width: 80px; height: 50px;">Sem datas</button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                {% endfor %}
+                {% else %}
+                    <p>Selecione uma especialidade para ver os médicos e suas datas disponíveis.</p>
+                {% endif %}
+            </div>
+              
+        </div>
+    </div>
+</div>
+{% endblock %}

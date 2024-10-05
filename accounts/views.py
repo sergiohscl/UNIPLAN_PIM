@@ -6,6 +6,8 @@ from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 
 
 def validou_email(email):
@@ -110,7 +112,7 @@ def edit_profile(request):
     perfil = user.perfil  # Perfil associado ao usuário logado
 
     if request.method == 'POST':
-        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil) # noqa E501
 
         if perfil_form.is_valid():
             perfil_form.save()
@@ -129,3 +131,43 @@ def edit_profile(request):
     return render(request, 'accounts/edit_profile.html', {
         'perfil_form': perfil_form
     })
+
+
+# @login_required
+# def edit_profile(request):
+#     user = request.user
+
+#     # Verifica se o perfil existe, se não, cria um novo
+#     if not hasattr(user, 'perfil'):
+#         cpf = gerar_cpf_unico()  # Gere o CPF único
+#         perfil = Perfil.objects.create(user=user, cpf=cpf)
+#     else:
+#         perfil = user.perfil  # Perfil associado ao usuário logado
+
+#     if request.method == 'POST':
+#         perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil) # noqa E501
+
+#         if perfil_form.is_valid():
+#             perfil_form.save()
+#             messages.success(request, "Perfil atualizado com sucesso.")
+#             return redirect('edit_profile')
+
+#         else:
+#             messages.error(
+#                 request,
+#                 "Houve um erro ao atualizar o perfil. Verifique os campos."
+#             )
+
+#     else:
+#         perfil_form = PerfilForm(instance=perfil)
+
+#     return render(request, 'accounts/edit_profile.html', {
+#         'perfil_form': perfil_form
+#     })
+
+
+# @receiver(post_save, sender=User)
+# def criar_perfil_usuario(sender, instance, created, **kwargs):
+#     if created and not hasattr(instance, 'perfil'):
+#         cpf = gerar_cpf_unico()
+#         Perfil.objects.create(user=instance, cpf=cpf)

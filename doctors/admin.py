@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PerfilDoctor, AvailableDate, Specialties
+from .models import AvailableTime, PerfilDoctor, AvailableDate, Specialties
 
 
 @admin.register(Specialties)
@@ -22,3 +22,9 @@ class AvailableDateAdmin(admin.ModelAdmin):
     search_fields = ('doctor__perfil__user__username', 'date')
     list_filter = ('doctor', 'date')
     ordering = ('doctor', 'date')
+
+
+@admin.register(AvailableTime)
+class AvailableTimeAdmin(admin.ModelAdmin):
+    list_display = ('available_date', 'time', 'scheduled')
+    list_filter = ('scheduled',)
