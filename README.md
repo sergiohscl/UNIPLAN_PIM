@@ -58,3 +58,8 @@ https://www.djangoproject.com/
 https://docs.allauth.org/en/latest/installation/quickstart.html
 
 https://console.developers.google.com/
+
+## Popular banco de dados
+    ./manage.py shell
+    from utils.<nome_arquivo> import <nome_função>
+    <nome_função>(coloque parameter se existir)
