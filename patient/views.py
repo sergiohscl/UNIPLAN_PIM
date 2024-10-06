@@ -16,9 +16,6 @@ def marcar_consulta(request):
     doctors = None
     available_dates = {}
 
-    print(request.user.perfil)
-    print(f"Paciente: {request.user.perfil}")
-
     if specialty_id:
         selected_specialty = get_object_or_404(Specialties, id=specialty_id)
         doctors = PerfilDoctor.objects.filter(specialty=selected_specialty)
@@ -28,53 +25,41 @@ def marcar_consulta(request):
                 doctor=doctor, scheduled=False
             )
 
-            # Processa o formulário de agendamento
-            if request.method == 'POST':
-                print("Método: ", request.method)  # Verifica o método
-                print("Formulário submetido com sucesso.")
-                for doctor in doctors:
-                    selected_date_id = request.POST.get(f'selected_date_{doctor.id}')  # noqa E501
+    # Processa o formulário de agendamento
+    if request.method == 'POST':
+        doctor_id = request.POST.get('doctor_id')
+        selected_date_id = request.POST.get(f'selected_date_{doctor_id}')
+        selected_time_str = request.POST.get(f'selected_time_{doctor_id}')
 
-                    selected_time_str = request.POST.get(f'selected_time_{doctor.id}')  # noqa E501
+        if selected_date_id and selected_time_str:
+            try:
+                # Recupera a data disponível
+                selected_date = AvailableDate.objects.get(id=selected_date_id)
+                selected_time = datetime.strptime(
+                    selected_time_str, '%H:%M'
+                ).time()
 
-                    print(f"Data selecionada: {selected_date_id}, Hora selecionada: {selected_time_str}") # noqa E501
+                # Cria a consulta
+                Consulta.objects.create(
+                    patient=request.user.perfil,
+                    available_date=selected_date,
+                    available_time=selected_time,
+                    status='A'
+                )
 
-                    if selected_date_id and selected_time_str:
-                        try:
-                            # Recupera a data disponível
-                            selected_date = AvailableDate.objects.get(
-                                id=selected_date_id
-                            )
+                # Marcar a data como agendada
+                selected_date.scheduled = True
+                selected_date.save()
 
-                            selected_time = datetime.strptime(
-                                selected_time_str, '%H:%M'
-                            ).time()
+                # Mensagem de sucesso
+                messages.add_message(request, constants.SUCCESS, f"Consulta agendada com o Dr. {selected_date.doctor.perfil.user.first_name} com sucesso!") # noqa E501
+                return redirect('my_queries')
 
-                            # Verifica se o paciente e a data são válidos
-                            print(f"Paciente: {request.user.perfil}, Médico: {doctor}, Data: {selected_date}, Hora: {selected_time}") # noqa E501
-                            print(f"Data: {selected_date}")
-                            print(f"Hora: {selected_time}")
-                            # Cria a consulta
-                            Consulta.objects.create(
-                                patient=request.user.perfil,
-                                available_date=selected_date,
-                                available_time=selected_time,
-                                status='A'
-                            )
-
-                            # Marcar a data como agendada
-                            selected_date.scheduled = True
-                            selected_date.save()
-
-                            # Mensagem de sucesso
-                            messages.add_message(request, constants.SUCCESS, f"Consulta agendada com o Dr. {doctor.perfil.user.first_name} com sucesso!") # noqa E501
-                            return redirect('my_queries')
-
-                        except AvailableDate.DoesNotExist:
-                            messages.add_message(
-                                request, constants.ERROR, "Data inválida."
-                            )
-                            print("Data não encontrada.")
+            except AvailableDate.DoesNotExist:
+                messages.add_message(
+                    request, constants.ERROR, "Data inválida."
+                )
+                return redirect('marcar_consulta')
 
     specialties = Specialties.objects.all()
 

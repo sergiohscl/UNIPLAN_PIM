@@ -1,3 +1,4 @@
+{% extends "base_live.html" %}
 {% load static %}
 {% block 'head' %}
 
@@ -9,73 +10,84 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'autentication/css/autentication.css' %}" />
 {% endblock 'head' %}
-{% block content %}
-<div class="container-fluid mt-3">
-    <div class="row">
-        <div class="col-md d-flex justify-content-center">
-            <div class="cont-cadastro">
-                <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
-                <label class="text-logo" style="color: #09A6A3">HEALING</label>
-        
-                <hr />
+{% block 'body' %}
 
-                <div class="container mt-5">
-                    <h2 class="mb-4">Minhas Consultas Agendadas</h2>
-
-                    {% if consultas %}
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Médico</th>
-                                        <th>Especialidade</th>
-                                        <th>Data</th>
-                                        <th>Horário</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for consulta in consultas %}
-                                    <tr>
-                                        <td>
-                                            {% if consulta.available_date.doctor.perfil.foto %}
-                                                <img src="{{ consulta.available_date.doctor.perfil.foto.url }}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
-                                            {% else %}
-                                                <img src="{% static 'assets/img/galery/avatar.png' %}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ consulta.available_date.doctor.perfil.user.first_name }} {{ consulta.available_date.doctor.perfil.user.last_name }}</td>
-                                        <td>{{ consulta.available_date.doctor.specialty.specialty }}</td>
-                                        <td>{{ consulta.available_date.date }}</td>
-                                        <td>{{ consulta.available_time|time:"H:i" }}</td> <!-- Supondo que há um horário associado -->
-                                        <td>
-                                            {% if consulta.status == 'A' %}
-                                                Agendada
-                                            {% elif consulta.status == 'F' %}
-                                                Finalizada
-                                            {% elif consulta.status == 'C' %}
-                                                Cancelada
-                                            {% elif consulta.status == 'I' %}
-                                                Iniciada
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p>Você não possui consultas agendadas no momento.</p>
-                    {% endif %}
-
-                    <div class="d-grid">
-                        <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
-                    </div>
-
-                </div>
-            </div>              
-        </div>
+<section class="py-xxl-10 pb-0" id="home">
+    <div class="bg-holder bg-size" style="background-image: url('{% static 'assets/img/gallery/hero-bg.png' %}');background-position:top center;background-size:cover;">
     </div>
-</div>
+
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col-md d-flex justify-content-center">
+                    <div class="cont-cadastro" style="margin-top: -80px"/>
+                        <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
+                        <label class="text-logo" style="color: #09A6A3">HEALING</label>
+                
+                        <hr />
+
+                        <div class="container mt-5">
+                            <h2 class="mb-4">Minhas Consultas Agendadas</h2>
+
+                            {% if consultas %}
+                                <div class="table-responsive mt-5">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Médico</th>
+                                                <th>Especialidade</th>
+                                                <th>Data</th>
+                                                <th>Horário</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for consulta in consultas %}
+                                            <tr>
+                                                <td>
+                                                    {% if consulta.available_date.doctor.perfil.foto %}
+                                                        <img src="{{ consulta.available_date.doctor.perfil.foto.url }}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
+                                                    {% else %}
+                                                        <img src="{% static 'assets/img/galery/avatar.png' %}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ consulta.available_date.doctor.perfil.user.first_name }} {{ consulta.available_date.doctor.perfil.user.last_name }}</td>
+                                                <td>{{ consulta.available_date.doctor.specialty.specialty }}</td>
+                                                <td>{{ consulta.available_date.date }}</td>
+                                                <td>{{ consulta.available_time|time:"H:i" }}</td> <!-- Supondo que há um horário associado -->
+                                                <td>
+                                                    {% if consulta.status == 'A' %}
+                                                        Agendada
+                                                    {% elif consulta.status == 'F' %}
+                                                        Finalizada
+                                                    {% elif consulta.status == 'C' %}
+                                                        Cancelada
+                                                    {% elif consulta.status == 'I' %}
+                                                        Iniciada
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p>Você não possui consultas agendadas no momento.</p>
+                            {% endif %}
+
+                            <div class="d-grid mt-5">
+                                <a href="{% url "marcar_consulta" %}" class="btn btn-dark-color-outline">Marcar Consulta</a>
+                            </div>
+
+                            <div class="d-grid mt-3">
+                                <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
+                            </div>
+
+                        </div>
+                    </div>              
+                </div>
+            </div>
+        </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
