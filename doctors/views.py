@@ -160,9 +160,9 @@ def list_doctor_specialty(request, specialty):
 
 def doctor_detail(request, doctor_id):
     doctor = get_object_or_404(PerfilDoctor, id=doctor_id)
-    
+
     return render(
         request,
         "doctors/doctor_detail.html",
-        {'doctor': doctor}
+        {'medico': doctor}
     )

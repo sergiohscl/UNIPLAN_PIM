@@ -1,6 +1,6 @@
 {% extends "base_live.html" %}
 {% load static %}
-{% block 'title' %} Especialidades {% endblock 'title' %}
+{% block 'title' %} Ver Perfil Doctor {% endblock 'title' %}
 {% block 'head' %}
 <link rel="stylesheet" href="{% static 'geral/css/base.css' %}" /> 
 <link
@@ -10,30 +10,59 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'autentication/css/autentication.css' %}" />
 {% endblock 'head' %}
+
 {% block 'body' %}
 
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card mb-4 shadow">
-                    <div class="card-body text-center">
-                        <img src="{{ medico.perfil.foto.url }}" alt="Foto do médico" class="rounded-circle mb-4" width="150" height="150">
-                        <h3 class="card-title">{{ medico.perfil.user.first_name }} {{ medico.perfil.user.last_name }}</h3>
-                        <p class="card-text">
-                            <strong>Especialidade:</strong> {{ medico.specialty }}<br>
-                            <strong>Cidade:</strong> {{ medico.city }}<br>
-                            <strong>País:</strong> {{ medico.country }}<br>
-                            <strong>CRM:</strong> {{ medico.crm }}<br>
-                            <strong>Telefone:</strong> {{ medico.telefone }}<br>
-                            <strong>Descrição:</strong> {{ medico.description }}<br>
-                            <strong>Preço da consulta:</strong> R$ {{ medico.price|floatformat:"2" }}
-                        </p>
+<section class="py-xxl-10 pb-0" id="home">
+    <div class="bg-holder bg-size" style="background-image: url('{% static 'assets/img/gallery/hero-bg.png' %}');background-position:top center;background-size:cover;">
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+          <!-- Formulário de Edição -->
+            <div class="col-md d-flex justify-content-center">
+                 <div class="cont-cadastro" style="margin-top: -80px;">
+                    <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
+                    <label class="text-logo" style="color: #09A6A3">HEALING</label>
+            
+                    <hr />
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="card mb-4 shadow mt-5">
+                                    <div class="card-body text-center">
+                                        <img src="{{ medico.perfil.foto.url }}" alt="Foto do médico" class="rounded-circle mb-4" width="150" height="150">
+                                        <h3 class="card-title">Dr(a). {{ medico.perfil.user.first_name }} {{ medico.perfil.user.last_name }}</h3>
+                                        <p class="card-text" style="line-height: 2;">
+                                            <strong>Especialidade:</strong> {{ medico.specialty }}<br>
+                                            <strong>Cidade:</strong> {{ medico.perfil.city }}<br>
+                                            <strong>País:</strong> {{ medico.perfil.country }}<br>
+                                            <strong>CRM:</strong> {{ medico.crm }}<br>
+                                            <strong>Telefone:</strong> {{ medico.perfil.telefone }}<br>
+                                            <strong>Descrição:</strong> {{ medico.description }}<br>
+                                            <strong>Preço da consulta:</strong> R$ {{ medico.price|floatformat:"2" }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-grid mt-5">
+                                    <a href="#" class="btn btn-dark-color-outline">Marcar Consulta</a>
+                                </div>
+                                <div class="d-grid mt-3">
+                                    <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
+
+
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </div>  
 
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
