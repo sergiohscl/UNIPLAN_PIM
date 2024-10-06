@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm
+from patient.models import Consulta
 from .models import AvailableDate, PerfilDoctor, Specialties, is_medico
 from .forms import PerfilDoctorForm
 from django.contrib import messages
@@ -165,4 +166,31 @@ def doctor_detail(request, doctor_id):
         request,
         "doctors/doctor_detail.html",
         {'medico': doctor}
+    )
+
+
+@login_required
+def doctor_queries(request):
+    if not is_medico(request.user):
+        messages.warning(request, "Somente médicos podem acessar essa página.")
+        return redirect('home')
+
+    # Obtém o perfil e o perfil de médico do usuário logado
+    perfil = Perfil.objects.get(user=request.user)
+    try:
+        perfil_doctor = PerfilDoctor.objects.get(perfil=perfil)
+    except PerfilDoctor.DoesNotExist:
+        messages.error(request, "Perfil de médico não encontrado.")
+        return redirect('home')
+
+    # Filtra as consultas marcadas para as datas disponíveis do médico
+    consultas = Consulta.objects.filter(available_date__doctor=perfil_doctor)
+
+    return render(
+        request,
+        'doctors/doctor_queries.html',
+        {
+            'consultas': consultas,
+            'is_medico': True
+        }
     )

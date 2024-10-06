@@ -13,7 +13,13 @@
             <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
                 <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="#about">Sobre Nós</a></li>
                 <li class="nav-item px-2"><a class="nav-link" href="#departments">Especialidade</a></li>
-                <li class="nav-item px-2"><a class="nav-link" href="{% url 'contact' %}">Contato</a></li>   
+                <li class="nav-item px-2"><a class="nav-link" href="#carouselExampleDark">Médicos</a></li>                
+                <li class="nav-item px-2"><a class="nav-link" href="{% url 'contact' %}">Contato</a></li>
+                
+                    <!-- Minhas Consultas visível apenas para usuários logados -->
+                    {% if user.is_authenticated and not is_medico %}
+                        <li class="nav-item px-2"><a class="nav-link" href="{% url 'my_queries' %}">Minhas Consultas</a></li>
+                    {% endif %}
                 
                   <!-- Área médica visível apenas para médicos -->
                   {% if is_medico %}
@@ -25,7 +31,7 @@
                       <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
                           <li><a class="dropdown-item text-secondary" href="{% url "open_schedule" %}">Abrir horários</a></li>
                           <div class="dropdown-divider bg-light"></div>
-                          <li><a class="dropdown-item text-secondary" href="#">Suas consultas</a></li>
+                          <li><a class="dropdown-item text-secondary" href="{% url 'doctor_queries' %}">Suas consultas</a></li>
                       </ul>
                     </li>       
               

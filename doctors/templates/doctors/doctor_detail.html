@@ -30,7 +30,7 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
-                                <div class="card mb-4 shadow mt-5">
+                                <div class="card mb-4 shadow mt-3">
                                     <div class="card-body text-center">
                                         <img src="{{ medico.perfil.foto.url }}" alt="Foto do médico" class="rounded-circle mb-4" width="150" height="150">
                                         <h3 class="card-title">Dr(a). {{ medico.perfil.user.first_name }} {{ medico.perfil.user.last_name }}</h3>
@@ -48,7 +48,7 @@
                                 <div class="d-grid mt-5">
                                     <a href="#" class="btn btn-dark-color-outline">Marcar Consulta</a>
                                 </div>
-                                <div class="d-grid mt-3">
+                                <div class="d-grid mt-3 mb-5">
                                     <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
                                 </div>
                             </div>

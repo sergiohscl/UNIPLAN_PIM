@@ -7,5 +7,6 @@ urlpatterns = [
     # path('list_availability/', views.list_availability, name='list_availability'), # noqa E501
     path('open_schedule/', views.open_schedule, name='open_schedule'),  # noqa E501
     path('list_specialty/<str:specialty>/', views.list_doctor_specialty, name='list_doctor_specialty'),  # noqa E501
-    path('doctor/<int:doctor_id>/', views.doctor_detail, name='doctor_detail')
+    path('doctor/<int:doctor_id>/', views.doctor_detail, name='doctor_detail'),
+    path('doctor_queries/', views.doctor_queries, name='doctor_queries'),
 ]
