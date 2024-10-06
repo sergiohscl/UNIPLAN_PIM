@@ -21,12 +21,17 @@
             <div class="row">
                 <div class="col-md d-flex justify-content-center">
                     <div class="cont-cadastro" style="margin-top: -80px"/>
+                    
                         <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
                         <label class="text-logo" style="color: #09A6A3">HEALING</label>
                 
                         <hr />
 
                         <div class="container mt-5">
+
+                            <img src="{{user.perfil.foto.url}}"  class="rounded-circle"  style="width: 120px;" alt="Avatar" >
+                            <label style="margin-left: 30px; font-size: 25px" class="p-bold">Olá, <span class="color-dark">Dr. {{request.user.first_name}}</span></label>
+                            <hr />
                             <h2>Consultas Médicas</h2>
                             <table class="table table-bordered table-striped mt-5">
                                 <thead>

@@ -12,19 +12,22 @@
 {% endblock 'head' %}
 
   {% block 'body' %}
+  <section class="py-xxl-10 pb-0" id="home">
+    <div class="bg-holder bg-size" style="background-image: url('{% static 'assets/img/gallery/hero-bg.png' %}');background-position:top center;background-size:cover;">
+    </div>
     <div class="container-fluid">
       <div class="row">
         <!-- Formulário de Edição -->
         <div class="col-md d-flex justify-content-center">
-            <div class="cont-cadastro">
+            <div class="cont-cadastro" style="margin-top: -80px">
               <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
               <label class="text-logo" style="color: #09A6A3">HEALING</label>
           
               <hr />
             
-              <div class="container py-5">
+              <div class="container py-3">
                 <h1 class="text-center">Médicos especializados em {{ specialty }}</h1>
-                <div class="row">
+                <div class="row mt-4">
                     {% for medico in medicos %}
                         <div class="col-md-4 mb-3">
                             <div class="card h-100">
@@ -32,10 +35,10 @@
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ medico.perfil.user.first_name }}</h5>
                                     <p class="card-text">{{ medico.specialty }}</p>
-                                    <p class="text-600 mb-0">{{ medico.city }}, {{ medico.country }}</p>
+                                    <p class="text-600 mb-0">{{ medico.perfil.city }}, {{ medico.perfil.country }}</p>
                                     <p class="card-text">R${{ medico.price|floatformat:"2"  }}</p>
                                     <p class="text-600 mb-4">{{ medico.description }}</p>
-                                    <a href="#" class="btn btn-primary">Marcar Consulta</a>
+                                    <a href="{% url 'marcar_consulta' %}" class="btn btn-primary">Marcar Consulta</a>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +54,7 @@
             </div>
       </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  {% endblock 'body' %}
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>    
+{% endblock 'body' %}
 </html>
