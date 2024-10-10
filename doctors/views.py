@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm
 from patient.models import Consulta
-from .models import AvailableDate, PerfilDoctor, Specialties, is_medico
+from .models import (
+    AvailableDate, AvailableTime, PerfilDoctor, Specialties, is_medico
+)
 from .forms import PerfilDoctorForm
 from django.contrib import messages
 from django.contrib.messages import constants
@@ -87,7 +89,6 @@ def open_schedule(request):
         )
         return redirect('home')
 
-    # Obtendo o perfil do usuário logado
     perfil = Perfil.objects.get(user=request.user)
 
     if request.method == "GET":
@@ -109,15 +110,26 @@ def open_schedule(request):
                 'is_medico': is_medico(request.user)
             }
         )
+
     elif request.method == "POST":
         data = request.POST.get('data')
+        horario = request.POST.get('horario')
 
-        data_formatada = datetime.strptime(data, "%Y-%m-%dT%H:%M")
-
-        if data_formatada <= datetime.now():
+        if not data or not horario:
             messages.add_message(
                 request, constants.WARNING,
-                'A data deve ser maior ou igual a data atual.'
+                'Data e horário são obrigatórios.'
+            )
+            return redirect('/doctors/open_schedule')
+
+        data_formatada = datetime.strptime(data, "%Y-%m-%d")
+        horario_formatado = datetime.strptime(horario, "%H:%M").time()
+
+        # Validar se a data é maior ou igual à data atual
+        if data_formatada.date() < datetime.now().date():
+            messages.add_message(
+                request, constants.WARNING,
+                'A data deve ser maior ou igual à data atual.'
             )
             return redirect('/doctors/open_schedule')
 
@@ -130,16 +142,31 @@ def open_schedule(request):
             )
             return redirect('home')
 
-        horario_abrir = AvailableDate(
-            date=data_formatada.date(),          
-            doctor=dados_medicos,
-            scheduled=False 
+        # Cria ou obtém a data disponível
+        horario_abrir, created = AvailableDate.objects.get_or_create(
+            date=data_formatada.date(), doctor=dados_medicos
         )
 
-        horario_abrir.save()
+        # Verifica se o horário já está cadastrado
+        if AvailableTime.objects.filter(
+            available_date=horario_abrir, time=horario_formatado
+        ).exists():
+            messages.add_message(
+                request, constants.WARNING,
+                f'Já existe um horário cadastrado para {data_formatada.strftime("%d/%m/%Y")} às {horario_formatado}.' # noqa E501
+            )
+            return redirect('/doctors/open_schedule')
+
+        # Cria o horário específico para a data
+        AvailableTime.objects.create(
+            available_date=horario_abrir,
+            time=horario_formatado,
+            scheduled=False
+        )
 
         messages.add_message(
-            request, constants.SUCCESS, 'Horário cadastrado com sucesso.'
+            request, constants.SUCCESS,
+            f'Horário cadastrado com sucesso para {data_formatada.strftime("%d/%m/%Y")} às {horario_formatado}.'  # noqa E501
         )
         return redirect('/doctors/open_schedule')
 
@@ -184,7 +211,7 @@ def doctor_queries(request):
         return redirect('home')
 
     # Filtra as consultas marcadas para as datas disponíveis do médico
-    consultas = Consulta.objects.filter(available_date__doctor=perfil_doctor)
+    consultas = Consulta.objects.filter(available_time__available_date__doctor=perfil_doctor) # noqa E501
 
     return render(
         request,

@@ -36,9 +36,8 @@
                             <table class="table table-bordered table-striped mt-5">
                                 <thead>
                                     <tr>
-                                        <th>Paciente</th>
-                                        <th>Data</th>
-                                        <th>Horário</th>
+                                        <th>Paciente</th>                                        
+                                        <th>Data & Horário</th>
                                         <th>Status</th>
                                         <th>Ações</th>
                                     </tr>
@@ -46,8 +45,7 @@
                                 <tbody>
                                     {% for consulta in consultas %}
                                         <tr>
-                                            <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>
-                                            <td>{{ consulta.available_date.date }}</td>
+                                            <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
                                             <td>{{ consulta.available_time }}</td>
                                             <td>{{ consulta.get_status_display }}</td>
                                             <td>

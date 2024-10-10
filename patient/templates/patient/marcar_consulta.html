@@ -114,16 +114,33 @@
 
                                             <!-- Horário -->
                                             <td>  
-                                                <input type="time" class="form-control" name="selected_time_{{ doctor.id }}" required>
+                                                {% comment %} <input type="time" class="form-control" name="selected_time_{{ doctor.id }}" required> {% endcomment %}
+
+                                                <select class="form-select" name="selected_time_{{ doctor.id }}">
+                                                    <option value="">Escolha uma horarios...</option>
+                                                    {% with available_times|get_item:doctor.id as times %}
+                                                    {% if times %}
+                                                        {% for date_id, time_list in times.items %}
+                                                            {% for time in time_list %}
+                                                                <option value="{{ time.id }}">{{ time.time }}</option>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <option value="">Nenhum horário disponível</option>
+                                                    {% endif %}
+                                                    {% endwith %}
+                                                
+                                                </select>
                                             </td>
                                         
                                             <!-- Botão Agendar -->
                                             <td>
-                                                {% if available_dates|get_item:doctor.id %}                                       
-                                                        <button type="submit" class="btn btn-success">Agendar</button>                                       
+                                                {% if available_dates|get_item:doctor.id and available_times|get_item:doctor.id %}
+                                                    <button type="submit" class="btn btn-success">Agendar</button>
                                                 {% else %}
                                                     <button class="btn btn-secondary d-flex justify-content-center align-items-center" disabled style="width: 80px; height: 50px;">Sem datas</button>
                                                 {% endif %}
+                                            
                                             </td>
                                         </tr>
                                     </tbody>

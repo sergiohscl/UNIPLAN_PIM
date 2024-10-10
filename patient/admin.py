@@ -5,13 +5,13 @@ from .models import Consulta, Document
 @admin.register(Consulta)
 class ConsultaAdmin(admin.ModelAdmin):
     list_display = (
-        'patient', 'available_date', 'available_time', 'status', 'link'
+        'patient', 'available_time', 'status', 'link'
     )
-    list_filter = ('status', 'available_date', 'available_time')
+    list_filter = ('status', 'available_time__available_date__date')
     search_fields = (
         'patient__user__username',
-        'available_date__date',
-        'available_time__time'
+        'available_time__available_date__date',  # Campo correto para a data
+        'available_time__time'  # Campo correto para o horário
     )
     list_editable = ('status', 'link')
 

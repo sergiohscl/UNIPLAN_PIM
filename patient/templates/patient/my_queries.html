@@ -17,7 +17,7 @@
     <div class="bg-holder bg-size" style="background-image: url('{% static 'assets/img/gallery/hero-bg.png' %}');background-position:top center;background-size:cover;">
     </div>
 
-        <div class="container-fluid mt-3">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-md d-flex justify-content-center">
                     <div class="cont-cadastro" style="margin-top: -80px"/>
@@ -46,16 +46,16 @@
                                             {% for consulta in consultas %}
                                             <tr>
                                                 <td>
-                                                    {% if consulta.available_date.doctor.perfil.foto %}
-                                                        <img src="{{ consulta.available_date.doctor.perfil.foto.url }}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
+                                                    {% if consulta.available_time.available_date.doctor.perfil.foto %}
+                                                        <img src="{{ consulta.available_time.available_date.doctor.perfil.foto.url }}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
                                                     {% else %}
                                                         <img src="{% static 'assets/img/galery/avatar.png' %}" class="img-fluid rounded-circle" alt="Avatar" style="width: 50px; height: 50px;">
                                                     {% endif %}
                                                 </td>
-                                                <td>{{ consulta.available_date.doctor.perfil.user.first_name }} {{ consulta.available_date.doctor.perfil.user.last_name }}</td>
-                                                <td>{{ consulta.available_date.doctor.specialty.specialty }}</td>
-                                                <td>{{ consulta.available_date.date }}</td>
-                                                <td>{{ consulta.available_time|time:"H:i" }}</td> <!-- Supondo que há um horário associado -->
+                                                <td>{{ consulta.available_time.available_date.doctor.perfil.user.first_name }} {{ consulta.available_time.available_date.doctor.perfil.user.last_name }}</td>
+                                                <td>{{ consulta.available_time.available_date.doctor.specialty.specialty }}</td>
+                                                <td>{{ consulta.available_time.available_date.date }}</td>
+                                                <td>{{ consulta.available_time.time|time:"H:i" }}</td> <!-- Corrigido para acessar o horário -->
                                                 <td>
                                                     {% if consulta.status == 'A' %}
                                                         Agendada
