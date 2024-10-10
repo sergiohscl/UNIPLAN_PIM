@@ -6,4 +6,3 @@ urlpatterns = [
     path('', views.contato, name='contact'),
     path('mensagem', views.processa_contato, name='mensagem'),
 ]
-

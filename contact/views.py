@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
+
 def contato(request):
     return render(request, 'contact/contact.html', {'form': FormContato()})
 
@@ -15,7 +16,7 @@ def contato(request):
 def processa_contato(request):
     if request.method == 'POST':
         contato = FormContato(request.POST)
-
+        print(contato)
         if contato.is_valid():
             try:
                 # enviar_email(contato)

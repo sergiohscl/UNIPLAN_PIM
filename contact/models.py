@@ -4,7 +4,6 @@ CHOICES_ASSUNTO = [
     ('', 'Selecione um assunto'),
     ('descontos', 'Descontos'),
     ('consultoria', 'Consultoria'),
-    ('freelance', 'Freelance'),
     ('elogios', 'Elogios'),
     ('reclamações', 'Reclamações'),
     ('outros', 'Outros'),

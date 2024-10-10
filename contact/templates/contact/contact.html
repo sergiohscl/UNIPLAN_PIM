@@ -6,48 +6,59 @@
 <section class="py-8">
   <div class="bg-holder bg-size" style="background-color: #bfddf3; height: 100vh; background-position: center;background-size:cover; display: flex; justify-content: center; align-items: center;">
   </div>
-    <div class="container mt-5">
-      <div class="row">
-        <div class="bg-holder bg-size" style="background-image:url('{% static 'assets/img/gallery/dote-bg.png' %}');background-position:bottom right;background-size:auto;">
-        </div>
-        <!--/.bg-holder-->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="bg-holder bg-size" style="background-image:url('{% static 'assets/img/gallery/dote-bg.png' %}');background-position:bottom right;background-size:auto;">
+      </div>
+      <!--/.bg-holder-->
 
-        <div class="col-lg-6 z-index-2 mb-5"><img class="w-100" src="{% static 'assets/img/gallery/appointment.png' %}" alt="..." /></div>
-        <div class="col-lg-6 z-index-2">
-          <form class="row g-3">
-            <div class="col-md-6">
-              <label class="visually-hidden" for="inputName">Nome</label>
-              <input class="form-control form-livedoc-control" id="inputName" type="text" placeholder="Nome" />
+      <div class="col-lg-6 z-index-2 mb-5"><img class="w-100" src="{% static 'assets/img/gallery/appointment.png' %}" alt="Contato" /></div>
+      <div class="col-lg-6 z-index-2">
+        <form method="POST" action="{% url 'mensagem' %}" class="row g-3">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+
+          <div class="col-md-6">
+            <label for="id_nome" class="form-label">Nome</label>
+            {{ form.nome }}
+            {% if form.nome.errors %}
+              <div class="text-danger">{{ form.nome.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-6">
+            <label for="id_assunto" class="form-label">Assunto</label>
+            {{ form.assunto }}
+            {% if form.assunto.errors %}
+              <div class="text-danger">{{ form.assunto.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-6">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <div class="text-danger">{{ form.email.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-12">
+            <label for="id_mensagem" class="form-label">Mensagem</label>
+            {{ form.mensagem }}
+            {% if form.mensagem.errors %}
+              <div class="text-danger">{{ form.mensagem.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <div class="d-grid">
+              <button class="btn btn-primary rounded-pill" type="submit">Enviar</button>
             </div>
-            <div class="col-md-6">
-              <label class="form-label visually-hidden" for="inputCategory">Assunto</label>
-              <select class="form-select" id="inputCategory">
-                <option selected="selected">Assunto</option>
-                <option> Assunto um</option>
-                <option> Assunto dois</option>
-                <option> Assunto   três</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label visually-hidden" for="inputEmail">Email</label>
-              <input class="form-control form-livedoc-control" id="inputEmail" type="email" placeholder="Email" />
-            </div>
-            <div class="col-md-12">
-              <label class="form-label visually-hidden" for="validationTextarea">Mensagem</label>
-              <textarea class="form-control form-livedoc-control" id="validationTextarea" placeholder="Mensagem" style="height: 250px;" required="required"></textarea>
-            </div>
-            <div class="col-12">
-              <div class="d-grid">
-                <button class="btn btn-primary rounded-pill" type="submit">Enviar</button>
-              </div>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
-  
-  </section>
-
-  {% include "partials/footer_live.html" %}
-
-  {% endblock 'body' %}
+  </div>
+</section>
+{% include "partials/footer_live.html" %}
+{% endblock %}
