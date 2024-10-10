@@ -37,7 +37,8 @@
                                 <thead>
                                     <tr>
                                         <th>Paciente</th>                                        
-                                        <th>Data & Horário</th>
+                                        <th>Data</th>
+                                        <th>Horário</th>
                                         <th>Status</th>
                                         <th>Ações</th>
                                     </tr>
@@ -46,7 +47,9 @@
                                     {% for consulta in consultas %}
                                         <tr>
                                             <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
-                                            <td>{{ consulta.available_time }}</td>
+                                            {% comment %} <td>{{ consulta.available_time }}</td>                                             {% endcomment %}
+                                            <td>{{ consulta.available_time.available_date.date | date:"d/m/Y" }}</td>
+                                            <td>{{ consulta.available_time.time | time:"H:i" }}</td>
                                             <td>{{ consulta.get_status_display }}</td>
                                             <td>
                                                 <a href="#" class="btn btn-sm btn-info">Detalhes</a>
