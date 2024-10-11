@@ -90,7 +90,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 14
+SITE_ID = 15
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -128,8 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = "pt-BR"
-
-DATE_FORMAT = 'd/m/Y'
 
 TIME_ZONE = "America/Sao_Paulo"
 

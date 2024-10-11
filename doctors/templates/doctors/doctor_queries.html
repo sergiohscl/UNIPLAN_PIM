@@ -52,9 +52,10 @@
                                             <td>{{ consulta.available_time.time | time:"H:i" }}</td>
                                             <td>{{ consulta.get_status_display }}</td>
                                             <td>
-                                                <a href="#" class="btn btn-sm btn-info">Detalhes</a>
                                                 {% if consulta.status == 'A' %}
-                                                    <a href="#" class="btn btn-sm btn-danger">Cancelar</a>
+                                                <a href="#" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
                                                 {% endif %}
                                             </td>
                                         </tr>

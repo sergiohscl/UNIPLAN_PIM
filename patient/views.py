@@ -6,6 +6,7 @@ from doctors.models import (
 from django.contrib.messages import constants
 from django.contrib import messages
 from patient.models import Consulta
+from django.utils import timezone
 
 
 @login_required
@@ -88,9 +89,13 @@ def marcar_consulta(request):
 
 @login_required
 def my_queries(request):
+    # Pega a data e o horário atual
+    current_time = timezone.now()
 
+    # Filtra as consultas do paciente e exibe as que ainda não ocorreram
     consultas = Consulta.objects.filter(
-        patient=request.user.perfil
+        patient=request.user.perfil,
+        available_time__available_date__date__gte=current_time.date(),
     ).order_by('available_time__available_date__date')
 
     context = {
@@ -98,3 +103,17 @@ def my_queries(request):
     }
 
     return render(request, 'patient/my_queries.html', context)
+
+
+# @login_required
+# def my_queries(request):
+
+#     consultas = Consulta.objects.filter(
+#         patient=request.user.perfil
+#     ).order_by('available_time__available_date__date')
+
+#     context = {
+#         'consultas': consultas
+#     }
+
+#     return render(request, 'patient/my_queries.html', context)
