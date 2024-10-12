@@ -267,3 +267,29 @@ def doctor_queries(request):
             'is_medico': True
         }
     )
+
+
+@login_required
+def cancelar_consulta_medico(request, consulta_id):
+    # Pega a consulta com o id fornecido
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
+    # Verifica se o usuário é o médico associado à consulta
+    if consulta.available_time.available_date.doctor.perfil == request.user.perfil: # noqa E501
+        # Atualiza o status da consulta para 'Cancelada'
+        consulta.status = 'C'
+        consulta.save()
+
+        messages.add_message(
+            request,
+            constants.SUCCESS,
+            "Consulta cancelada com sucesso e paciente será notificado."
+        )
+    else:
+        messages.add_message(
+            request,
+            constants.ERROR,
+            "Você não tem permissão para cancelar esta consulta."
+        )
+
+    return redirect('doctor_queries')

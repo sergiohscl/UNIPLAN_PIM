@@ -27,6 +27,16 @@
                 
                     <hr />
 
+                    {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                     <div class="container mt-5">
                         <img src="{{user.perfil.foto.url}}"  class="rounded-circle"  style="width: 120px;" alt="Avatar" >
                         <label style="margin-left: 30px; font-size: 25px" class="p-bold">Olá, <span class="color-dark">Dr. {{request.user.first_name}}</span></label>
@@ -51,7 +61,7 @@
                                         <td>{{ consulta.get_status_display }}</td>
                                         <td>
                                             {% if consulta.status == 'A' %}
-                                            <a href="#" class="btn btn-sm btn-danger">
+                                            <a href="{% url 'cancelar_consulta_medico' consulta.id %}" class="btn btn-sm btn-danger">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                             {% endif %}
@@ -86,7 +96,7 @@
                                         <td>{{ consulta.get_status_display }}</td>
                                         <td>
                                             {% if consulta.status == 'A' %}
-                                            <a href="#" class="btn btn-sm btn-danger">
+                                            <a href="{% url 'cancelar_consulta_medico' consulta.id %}" class="btn btn-sm btn-danger">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                             {% endif %}

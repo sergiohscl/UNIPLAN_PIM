@@ -9,4 +9,5 @@ urlpatterns = [
     path('list_specialty/<str:specialty>/', views.list_doctor_specialty, name='list_doctor_specialty'),  # noqa E501
     path('doctor/<int:doctor_id>/', views.doctor_detail, name='doctor_detail'),
     path('doctor_queries/', views.doctor_queries, name='doctor_queries'),
+    path('cancelar_consulta_medico/<int:consulta_id>/', views.cancelar_consulta_medico, name='cancelar_consulta_medico'), # noqa E501
 ]
