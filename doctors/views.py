@@ -9,7 +9,7 @@ from .models import (
 from .forms import PerfilDoctorForm
 from django.contrib import messages
 from django.contrib.messages import constants
-from datetime import datetime
+from datetime import datetime, date
 
 
 # View para criar ou atualizar PerfilDoctor
@@ -198,6 +198,7 @@ def doctor_detail(request, doctor_id):
 
 @login_required
 def doctor_queries(request):
+    # Verifica se o usuário é médico
     if not is_medico(request.user):
         messages.warning(request, "Somente médicos podem acessar essa página.")
         return redirect('home')
@@ -210,14 +211,53 @@ def doctor_queries(request):
         messages.error(request, "Perfil de médico não encontrado.")
         return redirect('home')
 
-    # Filtra as consultas marcadas para as datas disponíveis do médico
-    consultas = Consulta.objects.filter(available_time__available_date__doctor=perfil_doctor) # noqa E501
+    # Data de hoje
+    hoje = date.today()
 
+    # Filtra as consultas marcadas para as datas disponíveis do médico
+    consultas_hoje = Consulta.objects.filter(
+        available_time__available_date__doctor=perfil_doctor,
+        available_time__available_date__date=hoje
+    )
+
+    consultas_restantes = Consulta.objects.filter(
+        available_time__available_date__doctor=perfil_doctor,
+        available_time__available_date__date__gt=hoje
+    )
+
+    # Renderiza a página com as duas listas de consultas
     return render(
         request,
         'doctors/doctor_queries.html',
         {
-            'consultas': consultas,
+            'consultas_hoje': consultas_hoje,
+            'consultas_restantes': consultas_restantes,
             'is_medico': True
         }
     )
+
+# @login_required
+# def doctor_queries(request):
+#     if not is_medico(request.user):
+#         messages.warning(request, "Somente médicos podem acessar essa página.") # noqa E501
+#         return redirect('home')
+
+#     # Obtém o perfil e o perfil de médico do usuário logado
+#     perfil = Perfil.objects.get(user=request.user)
+#     try:
+#         perfil_doctor = PerfilDoctor.objects.get(perfil=perfil)
+#     except PerfilDoctor.DoesNotExist:
+#         messages.error(request, "Perfil de médico não encontrado.")
+#         return redirect('home')
+
+#     # Filtra as consultas marcadas para as datas disponíveis do médico
+#     consultas = Consulta.objects.filter(available_time__available_date__doctor=perfil_doctor) # noqa E501
+
+#     return render(
+#         request,
+#         'doctors/doctor_queries.html',
+#         {
+#             'consultas': consultas,
+#             'is_medico': True
+#         }
+#     )

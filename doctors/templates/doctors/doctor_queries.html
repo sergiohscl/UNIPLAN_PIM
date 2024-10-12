@@ -17,65 +17,98 @@
     <div class="bg-holder bg-size" style="background-image: url('{% static 'assets/img/gallery/hero-bg.png' %}');background-position:top center;background-size:cover;">
     </div>
 
-        <div class="container-fluid mt-3">
-            <div class="row">
-                <div class="col-md d-flex justify-content-center">
-                    <div class="cont-cadastro" style="margin-top: -80px"/>
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md d-flex justify-content-center">
+                <div class="cont-cadastro" style="margin-top: -80px"/>
                     
-                        <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
-                        <label class="text-logo" style="color: #09A6A3">HEALING</label>
+                    <img class="logo" src="{% static 'geral/img/logo.png' %}" alt="Logo">
+                    <label class="text-logo" style="color: #09A6A3">HEALING</label>
                 
+                    <hr />
+
+                    <div class="container mt-5">
+                        <img src="{{user.perfil.foto.url}}"  class="rounded-circle"  style="width: 120px;" alt="Avatar" >
+                        <label style="margin-left: 30px; font-size: 25px" class="p-bold">Olá, <span class="color-dark">Dr. {{request.user.first_name}}</span></label>
                         <hr />
-
-                        <div class="container mt-5">
-
-                            <img src="{{user.perfil.foto.url}}"  class="rounded-circle"  style="width: 120px;" alt="Avatar" >
-                            <label style="margin-left: 30px; font-size: 25px" class="p-bold">Olá, <span class="color-dark">Dr. {{request.user.first_name}}</span></label>
-                            <hr />
-                            <h2>Consultas Médicas</h2>
-                            <table class="table table-bordered table-striped mt-5">
-                                <thead>
+                        <h2>Consultas de Hoje</h2>
+                        <table class="table table-bordered table-striped mt-5">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>                                        
+                                    <th>Data</th>
+                                    <th>Horário</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for consulta in consultas_hoje %}
                                     <tr>
-                                        <th>Paciente</th>                                        
-                                        <th>Data</th>
-                                        <th>Horário</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
+                                        <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
+                                        <td>{{ consulta.available_time.available_date.date | date:"d/m/Y" }}</td>
+                                        <td>{{ consulta.available_time.time | time:"H:i" }}</td>
+                                        <td>{{ consulta.get_status_display }}</td>
+                                        <td>
+                                            {% if consulta.status == 'A' %}
+                                            <a href="#" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                            {% endif %}
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {% for consulta in consultas %}
-                                        <tr>
-                                            <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
-                                            {% comment %} <td>{{ consulta.available_time }}</td>                                             {% endcomment %}
-                                            <td>{{ consulta.available_time.available_date.date | date:"d/m/Y" }}</td>
-                                            <td>{{ consulta.available_time.time | time:"H:i" }}</td>
-                                            <td>{{ consulta.get_status_display }}</td>
-                                            <td>
-                                                {% if consulta.status == 'A' %}
-                                                <a href="#" class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="5" class="text-center">Nenhuma consulta marcada.</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">Nenhuma consulta marcada para hoje.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
 
-                        <div class="d-grid d-flex justify-content-center mt-5 mb-5">
-                            <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
-                        </div>
+                        <hr />
+                        <h2>Consultas Futuras</h2>
+                        <table class="table table-bordered table-striped mt-5">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>                                        
+                                    <th>Data</th>
+                                    <th>Horário</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for consulta in consultas_restantes %}
+                                    <tr>
+                                        <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
+                                        <td>{{ consulta.available_time.available_date.date | date:"d/m/Y" }}</td>
+                                        <td>{{ consulta.available_time.time | time:"H:i" }}</td>
+                                        <td>{{ consulta.get_status_display }}</td>
+                                        <td>
+                                            {% if consulta.status == 'A' %}
+                                            <a href="#" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">Nenhuma consulta futura marcada.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-                    </div>              
-                </div>
+                    <div class="d-grid d-flex justify-content-center mt-5 mb-5">
+                        <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
+                    </div>
+
+                </div>              
             </div>
         </div>
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
