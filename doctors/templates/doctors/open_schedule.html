@@ -67,21 +67,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for date in datas_abertas %}
-                            {% for time in date.availabletime_set.all %}
+
+                        {% for horario in horarios_com_status %}
                             <tr>
-                                <td>{{ date.date | date:"d/m/Y" }}</td>
-                                <td>{{ time.time }}</td>
-                                <td>
-                                    {% if time.scheduled %}
-                                        Agendado
-                                    {% else %}
-                                        Disponível
-                                    {% endif %}
-                                </td>
+                                <td>{{ horario.date | date:"d/m/Y" }}</td>
+                                <td>{{ horario.time }}</td>
+                                <td>{{ horario.status }}</td>
                             </tr>
-                            {% endfor %}
                         {% endfor %}
+                     
                     </tbody>
                 </table>
             </div>

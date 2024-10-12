@@ -91,6 +91,15 @@ def open_schedule(request):
 
     perfil = Perfil.objects.get(user=request.user)
 
+    # Atualizar status de consultas na view
+    agora = datetime.now()
+
+    # Atualiza o status das consultas passadas
+    AvailableTime.objects.filter(
+        available_date__doctor__perfil=perfil,
+        available_date__date__lt=agora.date()
+    ).update(scheduled=True)
+
     if request.method == "GET":
         try:
             dados_medicos = PerfilDoctor.objects.get(perfil=perfil)
@@ -102,11 +111,34 @@ def open_schedule(request):
             return redirect('home')
 
         datas_abertas = AvailableDate.objects.filter(doctor=dados_medicos)
+
+        # Pegar a data e hora atuais
+        today = datetime.now().date()
+        now = datetime.now().time()
+
+        # Lista modificada com status de cada horário
+        horarios_com_status = []
+        for data in datas_abertas:
+            for time in data.availabletime_set.all():
+                consulta_datetime = datetime.combine(data.date, time.time)
+                if consulta_datetime.date() < today or (consulta_datetime.date() == today and consulta_datetime.time() < now): # noqa E501
+                    status = 'Finalizada'
+                elif time.scheduled:
+                    status = 'Agendada'
+                else:
+                    status = 'Disponível'
+                horarios_com_status.append({
+                    'date': data.date,
+                    'time': time.time,
+                    'status': status,
+                })
+
         return render(
             request, 'doctors/open_schedule.html',
             {
                 'dados_medicos': dados_medicos,
                 'datas_abertas': datas_abertas,
+                'horarios_com_status': horarios_com_status,
                 'is_medico': is_medico(request.user)
             }
         )
@@ -235,29 +267,3 @@ def doctor_queries(request):
             'is_medico': True
         }
     )
-
-# @login_required
-# def doctor_queries(request):
-#     if not is_medico(request.user):
-#         messages.warning(request, "Somente médicos podem acessar essa página.") # noqa E501
-#         return redirect('home')
-
-#     # Obtém o perfil e o perfil de médico do usuário logado
-#     perfil = Perfil.objects.get(user=request.user)
-#     try:
-#         perfil_doctor = PerfilDoctor.objects.get(perfil=perfil)
-#     except PerfilDoctor.DoesNotExist:
-#         messages.error(request, "Perfil de médico não encontrado.")
-#         return redirect('home')
-
-#     # Filtra as consultas marcadas para as datas disponíveis do médico
-#     consultas = Consulta.objects.filter(available_time__available_date__doctor=perfil_doctor) # noqa E501
-
-#     return render(
-#         request,
-#         'doctors/doctor_queries.html',
-#         {
-#             'consultas': consultas,
-#             'is_medico': True
-#         }
-#     )
