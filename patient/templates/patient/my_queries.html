@@ -80,7 +80,7 @@
                                                 </td>
                                                 <td>
                                                     {% if consulta.status == 'A' %}
-                                                    <a href="#" class="btn btn-sm btn-danger">
+                                                    <a href="{% url 'cancel_consult_patient' consulta.id %}" class="btn btn-sm btn-danger">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
                                                     {% endif %}

@@ -105,15 +105,25 @@ def my_queries(request):
     return render(request, 'patient/my_queries.html', context)
 
 
-# @login_required
-# def my_queries(request):
+@login_required
+def cancelar_consulta(request, consulta_id):
+    # Pega a consulta com o id fornecido
+    consulta = get_object_or_404(Consulta, id=consulta_id)
 
-#     consultas = Consulta.objects.filter(
-#         patient=request.user.perfil
-#     ).order_by('available_time__available_date__date')
+    # Verifica se o usuário é o paciente associado à consulta
+    if consulta.patient == request.user.perfil:
+        # Atualiza o status da consulta para 'Cancelada'
+        consulta.status = 'C'
+        consulta.save()
 
-#     context = {
-#         'consultas': consultas
-#     }
+        messages.add_message(
+            request, constants.SUCCESS, "Consulta cancelada com sucesso."
+        )
+    else:
+        messages.add_message(
+            request,
+            constants.ERROR,
+            "Você não tem permissão para cancelar esta consulta."
+        )
 
-#     return render(request, 'patient/my_queries.html', context)
+    return redirect('my_queries')
