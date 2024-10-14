@@ -146,6 +146,6 @@ https://console.developers.google.com/
         http://127.0.0.1:8000/doctors/doctor_queries/
 
         Cancelar consulta:
-        http://127.0.0.1:8000/patient/cancelar_consulta_medico/<int:consulta_id>/
+        http://127.0.0.1:8000/doctors/cancelar_consulta_medico/<int:consulta_id>/
 
         Obs.: Quando o medico cancela a consulta  dispara um email avisando o usuario.
