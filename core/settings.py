@@ -94,6 +94,7 @@ SITE_ID = 15
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+SOCIALACCOUNT_ADAPTER = 'autentication.adapters.MySocialAccountAdapter'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
