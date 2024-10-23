@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Perfil
 from accounts.usuario_form import PerfilForm
-from patient.models import Consulta
+from patient.models import Consulta, Document
 from .models import (
     AvailableDate, AvailableTime, PerfilDoctor, Specialties, is_medico
 )
@@ -293,3 +293,130 @@ def cancelar_consulta_medico(request, consulta_id):
         )
 
     return redirect('doctor_queries')
+
+
+@login_required
+def initialize_query(request, consulta_id):
+
+    if not is_medico(request.user):
+        messages.add_message(
+            request,
+            constants.WARNING,
+            "Somente médicos podem acessar essa página."
+        )
+        return redirect('home')
+
+    if request.method == "GET":
+        consulta = Consulta.objects.get(id=consulta_id)
+        documentos = Document.objects.filter(consulta=consulta)
+        return render(
+            request,
+            'doctors/initialize_query.html',
+            {'consulta': consulta, 'documentos': documentos}
+        )
+    elif request.method == "POST":
+        consulta = Consulta.objects.get(id=consulta_id)
+        link = request.POST.get('link')
+
+        if consulta.status == 'C':
+            messages.add_message(
+                request, constants.WARNING,
+                'Essa consulta já foi cancelada.'
+            )
+            return redirect('/doctors/doctor_queries/')
+        elif consulta.status == "F":
+            messages.add_message(
+                request, constants.WARNING,
+                'Essa consulta já foi finalizada.'
+            )
+            return redirect('/doctors/doctor_queries/')
+
+        consulta.link = link
+        consulta.status = 'I'
+        consulta.save()
+
+        messages.add_message(
+            request, constants.SUCCESS, 'Consulta inicializada!'
+        )
+        return redirect(f'/doctors/initialize_query/{consulta_id}')
+
+
+@login_required
+def add_documento(request, consulta_id):
+    # Verifica se o usuário é médico
+    if not is_medico(request.user):
+        messages.add_message(
+            request, constants.WARNING,
+            'Somente médicos podem adicionar documentos.'
+        )
+        return redirect('home')
+
+    # Obtém a consulta pelo ID fornecido
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
+    # Verifica se o médico está associado à consulta
+    if consulta.available_time.available_date.doctor.perfil != request.user.perfil: # noqa E501
+        messages.add_message(
+            request, constants.ERROR,
+        )
+        return redirect('doctor_queries')
+
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        documento = request.FILES.get('documento')
+
+        # Verifica se o campo de documento foi preenchido
+        if not documento or not titulo:
+            messages.add_message(
+                request, constants.ERROR,
+            )
+            return redirect(f'/doctors/initialize_query/{consulta_id}')
+
+        # Cria o documento associado à consulta
+        novo_documento = Document(
+            consulta=consulta,
+            title=titulo,
+            document=documento
+        )
+
+        novo_documento.save()
+
+        messages.add_message(
+            request, constants.SUCCESS, 'Documento adicionado com sucesso!'
+        )
+        return redirect(f'/doctors/initialize_query/{consulta_id}')
+
+    # Se o método não for POST, redireciona para a página da consulta
+    return redirect(f'/doctors/initialize_query/{consulta_id}')
+
+
+@login_required
+def finalizar_consulta(request, consulta_id):
+    # Obtém a consulta pelo ID fornecido
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
+    # Verifica se o usuário é o médico associado à consulta
+    if consulta.available_time.available_date.doctor.perfil != request.user.perfil: # noqa E501
+        messages.add_message(
+            request, constants.ERROR,
+            'Você não tem permissão para finalizar esta consulta.'
+        )
+        return redirect('initialize_query', consulta_id=consulta.id)
+
+    # Verifica se a consulta já está finalizada
+    if consulta.status == 'F':
+        messages.add_message(
+            request, constants.INFO,
+            'Esta consulta já foi finalizada.'
+        )
+    else:
+        # Altera o status para 'F' (Finalizada)
+        consulta.status = 'F'
+        consulta.save()
+
+        messages.add_message(
+            request, constants.SUCCESS,
+            'Consulta finalizada com sucesso.'
+        )
+
+    return redirect('initialize_query', consulta_id=consulta.id)

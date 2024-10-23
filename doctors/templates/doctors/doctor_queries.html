@@ -55,7 +55,11 @@
                             <tbody>
                                 {% for consulta in consultas_hoje %}
                                     <tr>
-                                        <td>{{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}</td>                                            
+                                        <td>
+                                            <a href="{% url 'initialize_query' consulta.id %}">
+                                                {{ consulta.patient.user.first_name }} {{ consulta.patient.user.last_name }}
+                                            </a>
+                                        </td>                                            
                                         <td>{{ consulta.available_time.available_date.date | date:"d/m/Y" }}</td>
                                         <td>{{ consulta.available_time.time | time:"H:i" }}</td>
                                         <td>{{ consulta.get_status_display }}</td>
