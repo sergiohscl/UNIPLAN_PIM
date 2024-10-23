@@ -38,7 +38,14 @@
                                     <p class="text-600 mb-0">{{ medico.perfil.city }}, {{ medico.perfil.country }}</p>
                                     <p class="card-text">R${{ medico.price|floatformat:"2"  }}</p>
                                     <p class="text-600 mb-4">{{ medico.description }}</p>
-                                    <a href="{% url 'marcar_consulta' %}" class="btn btn-primary">Marcar Consulta</a>
+                                    {% if user.is_authenticated %}
+                                      <a href="{% url 'marcar_consulta' %}" class="btn btn-primary">Marcar Consulta</a>
+                                    {% else %}
+                                      <a class="btn btn-lg btn-primary rounded-pill" href="{% url 'login' %}" role="button" 
+                                        onclick="alert('Por favor, faça login antes de marcar uma consulta.'); return false;">
+                                        Marcar Consulta
+                                      </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

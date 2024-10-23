@@ -46,7 +46,14 @@
                                     </div>
                                 </div>
                                 <div class="d-grid mt-5">
-                                    <a href="{% url 'marcar_consulta' %}" class="btn btn-dark-color-outline">Marcar Consulta</a>
+                                    {% if user.is_authenticated %}
+                                        <a href="{% url 'marcar_consulta' %}" class="btn btn-dark-color-outline">Marcar Consulta</a>
+                                    {% else %}
+                                        <a class="btn btn-lg btn-primary rounded-pill" href="{% url 'login' %}" role="button" 
+                                          onclick="alert('Por favor, faça login antes de marcar uma consulta.'); return false;">
+                                          Marcar Consulta
+                                        </a>
+                                    {% endif %}
                                 </div>
                                 <div class="d-grid mt-3 mb-5">
                                     <a href="{% url "home" %}" class="btn btn-dark-color-outline">Voltar para Home</a>
