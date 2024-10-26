@@ -61,7 +61,7 @@ https://console.developers.google.com/
 ## Popular banco de dados
     ./manage.py shell
     from utils.<nome_arquivo> import <nome_função>
-    <nome_função>(coloque parameter se existir)
+    <nome_função>(coloque argumento se existir)
 
 <hr>
 
@@ -149,3 +149,28 @@ https://console.developers.google.com/
         http://127.0.0.1:8000/doctors/cancelar_consulta_medico/<int:consulta_id>/
 
         Obs.: Quando o medico cancela a consulta  dispara um email avisando o usuario.
+
+        Iniciar Cosnulta(clicar nome paciente):
+            1. clicar no link do Google Meet(abrir video conferencia)
+            2. Copia o link e cola no input.
+            3. clicar botão Inicar Cosnulta 
+
+        http://127.0.0.1:8000/doctors/initialize_query/12/
+
+        Obs.: E disparado um email com o link da sala para o paciente.
+
+        O médico poderá enviar documentos para o paciente:
+            1. Titiulo do documeto(Ex. Receita Media, Atestado Medido)
+            2. Fazer o upload do arquivo
+            3. clicar no botao + 
+
+        http://127.0.0.1:8000/doctors/add_documento/12/
+
+        Obs.: Disparado email para o paciente com os documentos medicos anexados.
+
+        Finalizar Consulta:
+
+        http://127.0.0.1:8000/doctors/finalizar_consulta/12/
+
+
+

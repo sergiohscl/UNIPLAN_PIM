@@ -26,7 +26,7 @@ def generate_times():
         current_time = (datetime.combine(date.today(), current_time) + timedelta(minutes=interval)).time() # noqa E501
 
     # Retorna um subconjunto aleatório dos horários (entre 2 e 5 horários por dia) # noqa E501
-    return random.sample(times, random.randint(2, 3))
+    return random.sample(times, random.randint(2, 5))
 
 
 # Função para popular AvailableDate e AvailableTime
@@ -36,7 +36,7 @@ def populate_available_dates_and_times():
 
     # Define a data inicial e a quantidade de dias a serem gerados
     start_date = date.today()
-    num_days = 6  # Por exemplo, gerar datas para os próximos 10 dias
+    num_days = 10  # Por exemplo, gerar datas para os próximos 10 dias
 
     # Itera por cada médico e associa um conjunto de datas e horários
     for doctor in doctors:
