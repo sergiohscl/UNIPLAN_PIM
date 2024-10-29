@@ -153,7 +153,7 @@ https://console.developers.google.com/
         Iniciar Cosnulta(clicar nome paciente):
             1. clicar no link do Google Meet(abrir video conferencia)
             2. Copia o link e cola no input.
-            3. clicar botão Inicar Cosnulta 
+            3. clicar botão Iniciar Consulta 
 
         http://127.0.0.1:8000/doctors/initialize_query/12/
 
@@ -171,6 +171,3 @@ https://console.developers.google.com/
         Finalizar Consulta:
 
         http://127.0.0.1:8000/doctors/finalizar_consulta/12/
-
-
-

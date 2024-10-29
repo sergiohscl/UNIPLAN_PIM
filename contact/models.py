@@ -3,7 +3,6 @@ from django.db import models
 CHOICES_ASSUNTO = [
     ('', 'Selecione um assunto'),
     ('descontos', 'Descontos'),
-    ('consultoria', 'Consultoria'),
     ('elogios', 'Elogios'),
     ('reclamações', 'Reclamações'),
     ('outros', 'Outros'),
