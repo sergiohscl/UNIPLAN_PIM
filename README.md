@@ -63,6 +63,8 @@ https://console.developers.google.com/
     from utils.<nome_arquivo> import <nome_função>
     <nome_função>(coloque argumento se existir)
 
+    Obs.: senha para todos: Django13$
+
 <hr>
 
 # Configuração no admin para autenticação
